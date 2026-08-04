@@ -1,7 +1,5 @@
-import { env } from '$env/dynamic/private';
-
 export async function GET() {
-  const GOOGLE_SCRIPT_URL = env.GOOGLE_SCRIPT_URL;
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7ivyJYKlrR_s0r17lJP52qbkKSCcXSilkuvdVuBtgosp7cKEVSEQi8JS_DpUImFufg/exec';
 
   if (!GOOGLE_SCRIPT_URL) {
     return new Response(JSON.stringify({ success: false, message: 'Missing API URL' }), {
@@ -40,7 +38,7 @@ export async function GET() {
 
 
 export async function POST({ request }) {
-  const GOOGLE_SCRIPT_URL = env.GOOGLE_SCRIPT_URL;
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7ivyJYKlrR_s0r17lJP52qbkKSCcXSilkuvdVuBtgosp7cKEVSEQi8JS_DpUImFufg/exec';
 
   if (!GOOGLE_SCRIPT_URL) {
     return new Response(JSON.stringify({ success: false, message: 'Missing API URL' }), {
