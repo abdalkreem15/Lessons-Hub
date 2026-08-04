@@ -22,7 +22,7 @@
     loading = true;
 
     try {
-      const endpoint = isRegistering ? '/api/data?action=register' : '/api/data?action=login';
+      const endpoint = '/api/data';
       
       // CORRECTED: The type changes depending on whether you are logging in or registering
       const payload = isRegistering 
