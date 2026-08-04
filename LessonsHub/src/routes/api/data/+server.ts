@@ -1,48 +1,54 @@
-import { json, type RequestEvent } from '@sveltejs/kit';
+import { GOOGLE_SCRIPT_URL } from '$env/static/private';
 
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgBmjubcogABkViVxDEMoCBpJeVfnO12JLCyRgk8lq3bvCBhNpLfPfuBUpSM1mWG1lSQ/exec';
-
-// Helper function to hash a password with a random salt
-async function hashPassword(password: string, existingSalt?: string) {
-  const salt = existingSalt || crypto.randomUUID();
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password + salt);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  return { hash: hashHex, salt };
-}
-
+// 1. ADD THIS GET FUNCTION FOR FETCHING DATA (Teachers, Users, Bookings, etc.)
 export async function GET() {
   try {
-    const res = await fetch(GOOGLE_SCRIPT_URL);
-    const data = await res.json();
-    return json(data);
-  } catch {
-    // Fallback including all new data tables
-    return json({ users: [], teachers: [], courses: [], books: [], bookings: [] });
+    const response = await fetch(GOOGLE_SCRIPT_URL);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (err: any) {
+    return new Response(JSON.stringify({ success: false, message: err.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }
 
-export async function POST({ request }: RequestEvent) {
-  const body = await request.json();
 
+// 2. KEEP YOUR EXISTING POST FUNCTION FOR LOGIN/REGISTER/BOOKING
+export async function POST({ request }) {
   try {
-    // If it's a registration request, hash the password before sending it to the Google Sheet
-    if (body.type === 'register') {
-      const { hash, salt } = await hashPassword(body.password);
-      body.password = `${hash}:${salt}`; // Store as hash:salt in the database
-    }
-
-    const res = await fetch(GOOGLE_SCRIPT_URL, {
+    const body = await request.json();
+    
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      headers: {
+        'Content-Type': 'text/plain', 
+      },
       body: JSON.stringify(body)
     });
 
-    const result = await res.json();
-    return json(result);
-  } catch {
-    return json({ success: false, message: 'Failed to communicate with external database spreadsheet.' }, { status: 500 });
+    const data = await response.json();
+    
+    return new Response(JSON.stringify(data), {
+      status: response.status,
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (err: any) {
+    return new Response(JSON.stringify({ success: false, message: err.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }
