@@ -8,6 +8,21 @@
 
   function handleSubmit(e: Event) {
     e.preventDefault();
+    
+    // 1. Grab the info
+    const senderName = currentUser ? currentUser.name : name;
+    const senderEmail = currentUser ? currentUser.email : email;
+    
+    const yourEmail = "abdalkareemalkafoury@gmail.com"; 
+
+    // 2. Format the subject and body for the email
+    const subject = encodeURIComponent(`New message from LessonsHub by ${senderName}`);
+    const body = encodeURIComponent(`Name: ${senderName}\nEmail: ${senderEmail}\n\nMessage:\n${message}`);
+
+    // 3. Open the user's default email app (Gmail, Thunderbird, Outlook, etc.)
+    window.location.href = `mailto:${yourEmail}?subject=${subject}&body=${body}`;
+
+    // 4. Show the success message on your website
     submitted = true;
   }
 </script>
@@ -18,7 +33,7 @@
 
   {#if submitted}
     <div class="bg-green-50 dark:bg-green-950/50 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 p-4 rounded-xl text-sm">
-      Thank you, <strong>{currentUser ? currentUser.name : name}</strong>! Your message has been sent successfully. We will get back to you soon.
+      Thank you, <strong>{currentUser ? currentUser.name : name}</strong>! Your email client has been opened with the message ready to send.
     </div>
   {:else}
     <form onsubmit={handleSubmit} class="space-y-4">
@@ -66,7 +81,7 @@
         type="submit" 
         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition cursor-pointer text-sm shadow-sm"
       >
-        Send Message
+        Open Email App
       </button>
     </form>
   {/if}
