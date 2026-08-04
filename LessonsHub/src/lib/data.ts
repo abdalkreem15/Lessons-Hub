@@ -19,7 +19,7 @@ export const teachers: Teacher[] = [
     id: '1',
     name: 'Dr. Ahmed Mohamed',
     subjectIds: ['math'],
-    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
     bio: 'Professor of Advanced Mathematics with 10+ years helping students excel.',
     price: 250,
     availableSlots: ['Saturday 4:00 PM', 'Monday 6:00 PM', 'Wednesday 8:00 PM']
