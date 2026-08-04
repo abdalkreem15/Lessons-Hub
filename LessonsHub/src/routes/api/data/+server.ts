@@ -1,7 +1,16 @@
-import { GOOGLE_SCRIPT_URL } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
-// 1. ADD THIS GET FUNCTION FOR FETCHING DATA (Teachers, Users, Bookings, etc.)
+// 1. GET FUNCTION FOR FETCHING DATA
 export async function GET() {
+  const GOOGLE_SCRIPT_URL = env.GOOGLE_SCRIPT_URL;
+
+  if (!GOOGLE_SCRIPT_URL) {
+    return new Response(JSON.stringify({ success: false, message: 'Server configuration error: Missing GOOGLE_SCRIPT_URL.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
   try {
     const response = await fetch(GOOGLE_SCRIPT_URL);
     
@@ -25,8 +34,17 @@ export async function GET() {
 }
 
 
-// 2. KEEP YOUR EXISTING POST FUNCTION FOR LOGIN/REGISTER/BOOKING
+// 2. POST FUNCTION FOR LOGIN/REGISTER/BOOKING
 export async function POST({ request }) {
+  const GOOGLE_SCRIPT_URL = env.GOOGLE_SCRIPT_URL;
+
+  if (!GOOGLE_SCRIPT_URL) {
+    return new Response(JSON.stringify({ success: false, message: 'Server configuration error: Missing GOOGLE_SCRIPT_URL.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
   try {
     const body = await request.json();
     
