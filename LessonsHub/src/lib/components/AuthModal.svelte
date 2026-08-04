@@ -5,65 +5,98 @@
   let name = $state('');
   let email = $state('');
   let password = $state('');
-  let errorMessage = $state('');
+  let error = $state('');
+  let loading = $state(false);
 
   async function handleSubmit(e: Event) {
     e.preventDefault();
-    errorMessage = '';
+    error = '';
+    loading = true;
 
-    const type = isRegistering ? 'register' : 'login';
-    const response = await fetch('/api/data', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type, name, email, password })
-    });
+    try {
+      const endpoint = isRegistering ? '/api/data?action=register' : '/api/data?action=login';
+      const payload = isRegistering ? { name, email, password } : { email, password };
 
-    const result = await response.json();
-    if (result.success) {
-      onLoginSuccess(result.user);
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        throw new Error(data.error || 'Authentication failed');
+      }
+
+      onLoginSuccess(data.user);
       onClose();
-    } else {
-      errorMessage = result.message || 'An error occurred.';
+      // Reset form
+      name = '';
+      email = '';
+      password = '';
+    } catch (err: any) {
+      error = err.message;
+    } finally {
+      loading = false;
     }
+  }
+
+  function toggleMode() {
+    isRegistering = !isRegistering;
+    error = '';
   }
 </script>
 
 {#if isOpen}
-  <div class="fixed inset-0 bg-black/50 backdrop-blur-xs flex justify-center items-center z-50 p-4">
-    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 w-full max-w-md shadow-xl transition-colors">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">
-          {isRegistering ? 'Create an Account' : 'Sign In'}
-        </h3>
-        <button onclick={onClose} class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 cursor-pointer">✕</button>
-      </div>
+  <!-- Outer Backdrop with responsive padding -->
+  <div class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 overflow-y-auto">
+    
+    <!-- Modal Content Box (constrained max-w-md with 100% responsive width) -->
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl w-full max-w-md p-6 shadow-2xl relative transition-colors box-border my-auto">
+      
+      <!-- Close Button -->
+      <button 
+        onclick={onClose} 
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition cursor-pointer text-lg font-bold p-1"
+        aria-label="Close modal"
+      >
+        ✕
+      </button>
 
-      {#if errorMessage}
-        <div class="bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 p-3 rounded-xl text-xs mb-4">
-          {errorMessage}
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
+        {isRegistering ? 'Create an Account' : 'Welcome Back'}
+      </h2>
+      <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
+        {isRegistering ? 'Sign up to book private lessons and send messages.' : 'Sign in to access your dashboard and bookings.'}
+      </p>
+
+      {#if error}
+        <div class="mb-4 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 p-3 rounded-xl text-xs">
+          {error}
         </div>
       {/if}
 
       <form onsubmit={handleSubmit} class="space-y-4">
         {#if isRegistering}
           <div>
-            <label for="modal-name" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
+            <label for="auth-name" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
             <input 
               type="text" 
-              id="modal-name"
+              id="auth-name"
               bind:value={name} 
               required 
               class="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="Your Name"
+              placeholder="Abdalkreem"
             />
           </div>
         {/if}
 
         <div>
-          <label for="modal-email" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+          <label for="auth-email" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
           <input 
             type="email" 
-            id="modal-email"
+            id="auth-email"
             bind:value={email} 
             required 
             class="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -72,10 +105,10 @@
         </div>
 
         <div>
-          <label for="modal-password" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+          <label for="auth-password" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
           <input 
             type="password" 
-            id="modal-password"
+            id="auth-password"
             bind:value={password} 
             required 
             class="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -85,21 +118,23 @@
 
         <button 
           type="submit" 
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition cursor-pointer text-sm shadow-sm"
+          disabled={loading}
+          class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2.5 rounded-xl transition cursor-pointer text-sm shadow-sm"
         >
-          {isRegistering ? 'Register' : 'Sign In'}
+          {loading ? 'Please wait...' : (isRegistering ? 'Register Account' : 'Sign In')}
         </button>
       </form>
 
-      <div class="mt-4 text-center text-xs text-gray-600 dark:text-gray-400">
+      <div class="mt-5 text-center text-xs text-gray-600 dark:text-gray-400">
         {#if isRegistering}
           Already have an account? 
-          <button onclick={() => isRegistering = false} class="text-blue-600 dark:text-blue-400 font-medium hover:underline cursor-pointer">Sign In</button>
+          <button onclick={toggleMode} class="text-blue-600 dark:text-blue-400 font-semibold hover:underline ml-1 cursor-pointer">Sign In</button>
         {:else}
-          Don't have an account? 
-          <button onclick={() => isRegistering = true} class="text-blue-600 dark:text-blue-400 font-medium hover:underline cursor-pointer">Register</button>
+          Don't have an account yet? 
+          <button onclick={toggleMode} class="text-blue-600 dark:text-blue-400 font-semibold hover:underline ml-1 cursor-pointer">Register</button>
         {/if}
       </div>
+
     </div>
   </div>
 {/if}
