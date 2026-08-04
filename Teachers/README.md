@@ -1,42 +1,43 @@
-# sv
+# 🎓 LessonsHub (Private Lessons Platform)
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A modern, full-stack web application built for managing and booking private educational lessons. Designed with a clean responsive interface, user authentication, live schedule tracking, and a serverless Google Sheets backend database.
 
-## Creating a project
+## 🚀 Tech Stack
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **Frontend / Framework:** Svelte 5 (using runes like `$state()`)
+- **Styling:** Tailwind CSS v4 (with Dark Mode support)
+- **Language:** TypeScript
+- **Database & API:** Google Apps Script Web App backed by Google Sheets (with salted SHA-256 password hashing)
+- **Deployment:** Vercel-ready
 
-```sh
-# create a new project
-npx sv create my-app
-```
+---
 
-To recreate this project with the same configuration:
+## ✨ Features
 
-```sh
-# recreate this project
-npx sv@0.17.0 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:typography,forms" --install npm Teachers
-```
+- **Dynamic Navigation & Views:** Client-side routing seamlessly toggles between Home, Teachers Directory, Subject Filters, About, and Contact Us views.
+- **User Authentication:** Secure registration and sign-in with cryptographic password hashing (SHA-256 with salts) stored securely via Google Apps Script.
+- **Interactive Booking System:** Students can browse teachers by subject, view real-time available time slots, and book sessions instantly. Taken slots automatically disable to prevent double-booking.
+- **Context-Aware Contact Form:** Automatically populates and locks with the signed-in user's name and email, falling back to a manual form for guests.
+- **Dark / Light Mode:** Fully responsive theme switcher utilizing Tailwind's dark mode classes and local storage persistence.
 
-## Developing
+---
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## 📂 Project Structure
 
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```text
+src/
+├── lib/
+│   └── components/
+│       ├── About.svelte
+│       ├── AuthModal.svelte       # Sign in / Register modal
+│       ├── ContactUs.svelte       # Dynamic contact form
+│       ├── Home.svelte
+│       ├── Subjects.svelte
+│       └── Teachers.svelte        # Teacher directory & booking logic
+├── routes/
+│   ├── api/
+│   │   └── data/
+│   │       └── +server.ts         # SvelteKit API route proxying Google Apps Script
+│   ├── +page.svelte               # Root component handling views & global state
+│   ├── +layout.svelte
+│   └── +layout.css                # Tailwind configuration
