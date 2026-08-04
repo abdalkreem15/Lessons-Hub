@@ -1,28 +1,32 @@
-export async function GET() {
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7ivyJYKlrR_s0r17lJP52qbkKSCcXSilkuvdVuBtgosp7cKEVSEQi8JS_DpUImFufg/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7ivyJYKlrR_s0r17lJP52qbkKSCcXSilkuvdVuBtgosp7cKEVSEQi8JS_DpUImFufg/exec';
 
-  if (!GOOGLE_SCRIPT_URL) {
-    return new Response(JSON.stringify({ success: false, message: 'Missing API URL' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
+// 1. GET FUNCTION (Optimized to request only specific data)
+export async function GET({ url }) {
   try {
-    const response = await fetch(GOOGLE_SCRIPT_URL);
+    // ✅ Get the ?type= parameter from the frontend (e.g., ?type=teachers,bookings)
+    // If no type is provided, it defaults to 'all'
+    const typeParam = url.searchParams.get('type') || 'all';
     
-    // ✅ SAFETY CHECK: Ensure Google returned JSON, not HTML
+    // ✅ Append it to the Google Script URL
+    const fetchUrl = `${GOOGLE_SCRIPT_URL}?type=${typeParam}`;
+
+    const response = await fetch(fetchUrl, {
+      redirect: 'follow' // Forces Vercel to follow Google's 302 redirects
+    });
+    
+    // ✅ SAFETY CHECK: Ensure Google returned JSON, not an HTML error page
     const contentType = response.headers.get('content-type') || '';
     if (!contentType.includes('application/json')) {
       const text = await response.text();
-      console.error("Google returned HTML instead of JSON:", text.substring(0, 200));
-      return new Response(JSON.stringify({ success: false, message: 'Google Script Error: Returned HTML instead of JSON. Check your Script Deployment settings.' }), {
+      console.error("Google GET returned HTML instead of JSON:", text.substring(0, 200));
+      return new Response(JSON.stringify({ success: false, message: 'Google Script Error: Returned HTML.' }), {
         status: 502,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
     const data = await response.json();
+    
     return new Response(JSON.stringify(data), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
@@ -37,33 +41,26 @@ export async function GET() {
 }
 
 
+// 2. POST FUNCTION (For Login, Register, Booking)
 export async function POST({ request }) {
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7ivyJYKlrR_s0r17lJP52qbkKSCcXSilkuvdVuBtgosp7cKEVSEQi8JS_DpUImFufg/exec';
-
-  if (!GOOGLE_SCRIPT_URL) {
-    return new Response(JSON.stringify({ success: false, message: 'Missing API URL' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-
   try {
     const body = await request.json();
     
     const response = await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'text/plain', 
+        'Content-Type': 'text/plain', // Required by Google Apps Script
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
+      redirect: 'follow' // Forces Vercel to follow Google's 302 redirects
     });
 
-    // ✅ SAFETY CHECK: Ensure Google returned JSON, not HTML
+    // ✅ SAFETY CHECK: Ensure Google returned JSON
     const contentType = response.headers.get('content-type') || '';
     if (!contentType.includes('application/json')) {
       const text = await response.text();
       console.error("Google POST returned HTML:", text.substring(0, 200));
-      return new Response(JSON.stringify({ success: false, message: 'Google Script Error: Returned HTML. Is your Web App set to "Anyone"?' }), {
+      return new Response(JSON.stringify({ success: false, message: 'Google Script Error: Returned HTML.' }), {
         status: 502,
         headers: { 'Content-Type': 'application/json' }
       });

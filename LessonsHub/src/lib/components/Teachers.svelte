@@ -22,7 +22,8 @@
   let existingBookings = $state<any[]>([]);
 
   $effect(() => {
-    fetch('/api/data')
+    // ✅ UPDATED: Only request bookings to speed up loading and prevent timeouts!
+    fetch('/api/data?type=bookings')
       .then(res => res.json())
       .then(data => { if (data.bookings) existingBookings = data.bookings; })
       .catch(() => {});

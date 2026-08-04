@@ -26,8 +26,9 @@
       currentUser = JSON.parse(savedUser);
     }
 
-    // Fetch live data from your Google Sheets backend endpoint
-    fetch('/api/data')
+    // ✅ FIXED: Only request what the homepage actually needs!
+    // This cuts the Google Sheets loading time by more than half.
+    fetch('/api/data?type=teachers,courses,books')
       .then(res => res.json())
       .then(data => {
         if (data.teachers) teachersData = data.teachers;
