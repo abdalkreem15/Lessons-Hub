@@ -17,12 +17,6 @@
         >
           Explore Teachers
         </button>
-        <button 
-          onclick={() => onNavigate('subjects')}
-          class="bg-blue-700/50 hover:bg-blue-700/80 border border-blue-400/30 text-white font-semibold px-6 py-2.5 rounded-xl transition cursor-pointer text-sm"
-        >
-          View Subjects
-        </button>
       </div>
     </div>
   </div>

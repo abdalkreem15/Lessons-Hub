@@ -2,7 +2,6 @@
   import { onMount } from 'svelte';
   import Home from '$lib/components/Home.svelte';
   import Teachers from '$lib/components/Teachers.svelte';
-  import Subjects from '$lib/components/Subjects.svelte';
   import About from '$lib/components/About.svelte';
   import ContactUs from '$lib/components/ContactUs.svelte';
   import AuthModal from '$lib/components/AuthModal.svelte';
@@ -12,8 +11,13 @@
   let isDarkMode = $state(false);
   let isMobileMenuOpen = $state(false);
   
-  let currentUser = $state<{ id: string; name: string; email: string } | null>(null);
+  let currentUser = $state<{ id: string; name: string; email: string; role?: string } | null>(null);
   let isSignupModalOpen = $state(false);
+
+  // Live data states replacing static data.ts
+  let teachersData = $state<any[]>([]);
+  let coursesData = $state<any[]>([]);
+  let booksData = $state<any[]>([]);
 
   onMount(() => {
     isDarkMode = document.documentElement.classList.contains('dark');
@@ -21,6 +25,16 @@
     if (savedUser) {
       currentUser = JSON.parse(savedUser);
     }
+
+    // Fetch live data from your Google Sheets backend endpoint
+    fetch('/api/data')
+      .then(res => res.json())
+      .then(data => {
+        if (data.teachers) teachersData = data.teachers;
+        if (data.courses) coursesData = data.courses;
+        if (data.books) booksData = data.books;
+      })
+      .catch(err => console.error("Failed to load sheet data:", err));
   });
 
   function toggleTheme() {
@@ -61,7 +75,6 @@
       <div class="hidden md:flex items-center gap-6">
         <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'home' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'home'}>Home</button>
         <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'teachers' && activeSubjectFilter === 'all' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { activeSubjectFilter = 'all'; currentView = 'teachers'; }}>Teachers</button>
-        <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'subjects' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'subjects'}>Subjects</button>
         <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'about' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'about'}>About</button>
         <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'contact' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'contact'}>Contact Us</button>
 
@@ -104,7 +117,6 @@
       <div class="md:hidden bg-gray-900 border-t border-gray-800 px-6 py-4 flex flex-col gap-3 shadow-xl">
         <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'home' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'home'; isMobileMenuOpen = false; }}>Home</button>
         <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'teachers' && activeSubjectFilter === 'all' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { activeSubjectFilter = 'all'; currentView = 'teachers'; isMobileMenuOpen = false; }}>Teachers</button>
-        <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'subjects' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'subjects'; isMobileMenuOpen = false; }}>Subjects</button>
         <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'about' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'about'; isMobileMenuOpen = false; }}>About</button>
         <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'contact' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'contact'; isMobileMenuOpen = false; }}>Contact Us</button>
 
@@ -124,9 +136,7 @@
     {#if currentView === 'home'}
       <Home onNavigate={(view: string) => currentView = view} />
     {:else if currentView === 'teachers'}
-      <Teachers selectedSubjectId={activeSubjectFilter} onSelectSubjectFilter={(id: string) => activeSubjectFilter = id} {currentUser} />
-    {:else if currentView === 'subjects'}
-      <Subjects onSelectSubject={handleSelectSubject} />
+      <Teachers teachers={teachersData} selectedSubjectId={activeSubjectFilter} onSelectSubjectFilter={(id: string) => activeSubjectFilter = id} {currentUser} />
     {:else if currentView === 'about'}
       <About />
     {:else if currentView === 'contact'}

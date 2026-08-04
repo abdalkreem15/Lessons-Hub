@@ -1,6 +1,6 @@
 import { json, type RequestEvent } from '@sveltejs/kit';
 
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzJty4VJr_xzkNYd78ACq3P2OPwz6uNwgignnkXEq-o2upbFJ2rosOyUXbwLGO1xCKkoA/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgBmjubcogABkViVxDEMoCBpJeVfnO12JLCyRgk8lq3bvCBhNpLfPfuBUpSM1mWG1lSQ/exec';
 
 // Helper function to hash a password with a random salt
 async function hashPassword(password: string, existingSalt?: string) {
@@ -19,7 +19,8 @@ export async function GET() {
     const data = await res.json();
     return json(data);
   } catch {
-    return json({ users: [], bookings: [] });
+    // Fallback including all new data tables
+    return json({ users: [], teachers: [], courses: [], books: [], bookings: [] });
   }
 }
 
@@ -33,8 +34,6 @@ export async function POST({ request }: RequestEvent) {
       body.password = `${hash}:${salt}`; // Store as hash:salt in the database
     }
 
-    // If it's a login request, we send the raw password and let the Google Sheet / verification handle it, 
-    // OR if your Google Apps Script handles verification, it can split by ':' and re-hash.
     const res = await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
