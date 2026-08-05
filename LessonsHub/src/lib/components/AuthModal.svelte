@@ -11,7 +11,8 @@
   let bio = $state('');
   let imageUrl = $state('');
   let price = $state('150'); 
-  let timeSlots = $state('10:00 AM, 02:00 PM, 06:00 PM'); 
+  // ✅ UPDATED: Default value now includes days
+  let timeSlots = $state('10:00 AM (Mon, Wed), 02:00 PM (Sat), 06:00 PM (Thu)'); 
 
   let error = $state('');
   let loading = $state(false);
@@ -24,7 +25,6 @@
     try {
       const endpoint = '/api/data';
       
-      // CORRECTED: The type changes depending on whether you are logging in or registering
       const payload = isRegistering 
         ? { 
             type: 'register', 
@@ -34,7 +34,7 @@
             slots: String(timeSlots)  
           } 
         : { 
-            type: 'login', // <--- THIS is what fixes the bug!
+            type: 'login', 
             email, 
             password 
           };
@@ -54,9 +54,10 @@
       onLoginSuccess(data.user);
       onClose();
       
-      // Reset form
+      // ✅ UPDATED: Reset form with the new day format
       name = ''; email = ''; password = ''; isTeacher = false; 
-      subject = ''; bio = ''; imageUrl = ''; price = '150'; timeSlots = '10:00 AM, 02:00 PM, 06:00 PM';
+      subject = ''; bio = ''; imageUrl = ''; price = '150'; 
+      timeSlots = '10:00 AM (Mon, Wed), 02:00 PM (Sat), 06:00 PM (Thu)';
     } catch (err: any) {
       error = err.message;
     } finally {
@@ -137,9 +138,10 @@
               </div>
 
               <div>
-                <label for="auth-slots" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Available Time Slots</label>
-                <input type="text" id="auth-slots" bind:value={timeSlots} class="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="10:00 AM, 02:00 PM, 06:00 PM" />
-                <p class="text-[10px] text-gray-400 mt-1">Separate each slot with a comma.</p>
+                <label for="auth-slots" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Available Time Slots & Days</label>
+                <input type="text" id="auth-slots" bind:value={timeSlots} class="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="10:00 AM (Mon, Wed), 02:00 PM (Sat)" />
+                <!-- ✅ UPDATED: Helper text explaining the new format -->
+                <p class="text-[10px] text-gray-400 mt-1">Format: Time (Days). Separate slots with a comma. E.g., 05:00 PM (Tue, Thu)</p>
               </div>
             </div>
           {/if}

@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import Home from '$lib/components/Home.svelte';
   import Teachers from '$lib/components/Teachers.svelte';
+  import TeacherProfile from '$lib/components/TeacherProfile.svelte';
   import About from '$lib/components/About.svelte';
   import ContactUs from '$lib/components/ContactUs.svelte';
   import AuthModal from '$lib/components/AuthModal.svelte';
@@ -14,10 +15,12 @@
   let currentUser = $state<{ id: string; name: string; email: string; role?: string } | null>(null);
   let isSignupModalOpen = $state(false);
 
-  // Live data states replacing static data.ts
   let teachersData = $state<any[]>([]);
   let coursesData = $state<any[]>([]);
   let booksData = $state<any[]>([]);
+  
+  // State to hold the selected teacher data for the profile page
+  let selectedTeacher = $state<any>(null);
 
   onMount(() => {
     isDarkMode = document.documentElement.classList.contains('dark');
@@ -26,8 +29,6 @@
       currentUser = JSON.parse(savedUser);
     }
 
-    // ✅ FIXED: Only request what the homepage actually needs!
-    // This cuts the Google Sheets loading time by more than half.
     fetch('/api/data?type=teachers,courses,books')
       .then(res => res.json())
       .then(data => {
@@ -63,10 +64,17 @@
     activeSubjectFilter = subjectId;
     currentView = 'teachers';
   }
+
+  // Function to open a teacher's profile
+  function handleSelectTeacher(teacher: any) {
+    selectedTeacher = teacher;
+    currentView = 'teacher-profile';
+    window.scrollTo(0, 0);
+  }
 </script>
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col transition-colors duration-200">
-  <header class="bg-gray-900 text-white shadow-md border-b border-gray-800 relative z-50">
+  <header class="bg-gray-900 text-white shadow-md border-b border-gray-800 sticky top-0 z-50">
     <nav class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
       <button class="font-bold text-xl text-left cursor-pointer" onclick={() => { currentView = 'home'; isMobileMenuOpen = false; }}>
         🎓 LessonsHub
@@ -137,7 +145,19 @@
     {#if currentView === 'home'}
       <Home onNavigate={(view: string) => currentView = view} />
     {:else if currentView === 'teachers'}
-      <Teachers teachers={teachersData} selectedSubjectId={activeSubjectFilter} onSelectSubjectFilter={(id: string) => activeSubjectFilter = id} {currentUser} />
+      <Teachers 
+        teachers={teachersData} 
+        selectedSubjectId={activeSubjectFilter} 
+        onSelectSubjectFilter={(id: string) => activeSubjectFilter = id} 
+        onSelectTeacher={handleSelectTeacher}
+        {currentUser} 
+      />
+    {:else if currentView === 'teacher-profile'}
+      <TeacherProfile 
+        teacher={selectedTeacher} 
+        {currentUser} 
+        onBack={() => currentView = 'teachers'} 
+      />
     {:else if currentView === 'about'}
       <About />
     {:else if currentView === 'contact'}
