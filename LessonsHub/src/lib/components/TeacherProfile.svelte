@@ -3,25 +3,31 @@
 
   let existingBookings = $state<any[]>([]);
   let bookingStatus = $state<string>('');
-  let loadingSlots = $state<string | null>(null); // Tracks which slot is currently processing
+  let loadingSlots = $state<string | null>(null);
 
-  // Parse the slot string e.g. "10:00 AM (Mon, Thu)" into { time: "10:00 AM", days: ["Mon", "Thu"] }
+  // Parse the slot string e.g. "10:00 AM (Mon, Wed)" into { time: "10:00 AM", days: ["Mon", "Wed"] }
   function parseSlot(slotString: string) {
     const match = slotString.match(/(.*?)(?:\s*\((.*?)\))?$/);
     const time = (match ? match[1] : slotString).trim();
     const daysStr = match && match[2] ? match[2].trim() : null;
     
-    let days = ['Any Day']; // Fallback if teacher didn't specify days
+    let days = ['Any Day'];
     if (daysStr) {
       days = daysStr.split(',').map(d => d.trim());
     }
     return { time, days };
   }
 
-  // Get raw slots array
-  let rawSlots = $derived(
-    (teacher.slots || teacher.Slots || '10:00 AM').split(',').map((s: string) => s.trim()).filter(Boolean)
-  );
+  // ✅ REAL FIX: Split by commas, BUT IGNORE commas inside parentheses
+  let rawSlots = $derived.by(() => {
+    const slotString = teacher.slots || teacher.Slots || '10:00 AM';
+    
+    // This regex splits by "," ONLY if there is no closing ")" coming before an opening "("
+    // E.g., it splits "10:00 AM (Mon, Wed), 02:00 PM" but ignores the comma in "(Mon, Wed)"
+    const matches = slotString.split(/,\s*(?![^(]*\))/).map((s: string) => s.trim()).filter(Boolean);
+    
+    return matches.length > 0 ? matches : [slotString];
+  });
 
   // Fetch bookings ONLY for this teacher
   $effect(() => {
@@ -39,7 +45,6 @@
   async function bookSlot(time: string, day: string) {
     if (!currentUser) { alert('Please sign in to book a session.'); return; }
     
-    // The exact slot string saved to Google Sheets (e.g., "10:00 AM - Monday")
     const finalSlotString = `${time} - ${day}`; 
     
     if (existingBookings.some(b => b.slot === finalSlotString)) {
