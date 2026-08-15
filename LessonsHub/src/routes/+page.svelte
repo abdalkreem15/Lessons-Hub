@@ -3,6 +3,9 @@
   import Home from '$lib/components/Home.svelte';
   import Teachers from '$lib/components/Teachers.svelte';
   import TeacherProfile from '$lib/components/TeacherProfile.svelte';
+  import Courses from '$lib/components/Courses.svelte';
+  import AddCourseModal from '$lib/components/AddCourseModal.svelte';
+  import AddContentModal from '$lib/components/AddContentModal.svelte';
   import About from '$lib/components/About.svelte';
   import ContactUs from '$lib/components/ContactUs.svelte';
   import AuthModal from '$lib/components/AuthModal.svelte';
@@ -14,13 +17,17 @@
   
   let currentUser = $state<{ id: string; name: string; email: string; role?: string } | null>(null);
   let isSignupModalOpen = $state(false);
+  let isCourseModalOpen = $state(false);
+  let isContentModalOpen = $state(false);
+  let activeCourseId = $state<string | null>(null);
 
   let teachersData = $state<any[]>([]);
   let coursesData = $state<any[]>([]);
   let booksData = $state<any[]>([]);
-  
-  // State to hold the selected teacher data for the profile page
+  let contentData = $state<any[]>([]); 
+  let purchasedCourses = $state<string[]>([]); 
   let selectedTeacher = $state<any>(null);
+  let preselectedCourseId = $state<string | null>(null); // ✅ NEW: For deep linking from teacher profile
 
   onMount(() => {
     isDarkMode = document.documentElement.classList.contains('dark');
@@ -29,12 +36,18 @@
       currentUser = JSON.parse(savedUser);
     }
 
-    fetch('/api/data?type=teachers,courses,books')
+    const savedPurchases = localStorage.getItem('purchasedCourses');
+    if (savedPurchases) {
+      purchasedCourses = JSON.parse(savedPurchases);
+    }
+
+    fetch('/api/data?type=teachers,courses,books,content')
       .then(res => res.json())
       .then(data => {
         if (data.teachers) teachersData = data.teachers;
         if (data.courses) coursesData = data.courses;
         if (data.books) booksData = data.books;
+        if (data.content) contentData = data.content;
       })
       .catch(err => console.error("Failed to load sheet data:", err));
   });
@@ -65,10 +78,34 @@
     currentView = 'teachers';
   }
 
-  // Function to open a teacher's profile
   function handleSelectTeacher(teacher: any) {
     selectedTeacher = teacher;
     currentView = 'teacher-profile';
+    window.scrollTo(0, 0);
+  }
+
+  function handleCourseAdded(newCourse: any) {
+    coursesData = [...coursesData, newCourse];
+  }
+
+  function handlePurchase(courseId: string) {
+    if (!currentUser) {
+      alert('Please sign in to purchase this course.');
+      return;
+    }
+    const newPurchases = [...purchasedCourses, courseId];
+    purchasedCourses = newPurchases;
+    localStorage.setItem('purchasedCourses', JSON.stringify(newPurchases));
+  }
+
+  function handleContentAdded(newContent: any) {
+    contentData = [...contentData, newContent];
+  }
+
+  // ✅ NEW: Handles clicking "View" on a teacher profile to jump to the course page
+  function handleViewCourseFromTeacher(courseId: string) {
+    preselectedCourseId = courseId;
+    currentView = 'courses';
     window.scrollTo(0, 0);
   }
 </script>
@@ -80,14 +117,13 @@
         🎓 LessonsHub
       </button>
       
-      <!-- Desktop Navigation Links -->
       <div class="hidden md:flex items-center gap-6">
         <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'home' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'home'}>Home</button>
         <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'teachers' && activeSubjectFilter === 'all' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { activeSubjectFilter = 'all'; currentView = 'teachers'; }}>Teachers</button>
+        <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'courses' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'courses'}>Courses</button>
         <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'about' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'about'}>About</button>
         <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'contact' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'contact'}>Contact Us</button>
 
-        <!-- Desktop Navbar Auth Button -->
         <div class="flex items-center gap-3 border-l border-gray-700 pl-6">
           {#if currentUser}
             <span class="text-xs font-medium bg-gray-800 px-3 py-1.5 rounded-lg text-blue-300">👤 {currentUser.name}</span>
@@ -102,30 +138,21 @@
         </button>
       </div>
 
-      <!-- Mobile Right Controls (Theme Toggle & Burger Button) -->
       <div class="flex items-center gap-3 md:hidden">
         <button onclick={toggleTheme} class="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition cursor-pointer text-sm" aria-label="Toggle theme">
           {#if isDarkMode}☀️{:else}🌙{/if}
         </button>
-        <button 
-          onclick={() => isMobileMenuOpen = !isMobileMenuOpen} 
-          class="p-2 rounded-lg bg-gray-800 text-gray-200 hover:bg-gray-700 transition cursor-pointer focus:outline-none"
-          aria-label="Toggle menu"
-        >
-          {#if isMobileMenuOpen}
-            ✕
-          {:else}
-            ☰
-          {/if}
+        <button onclick={() => isMobileMenuOpen = !isMobileMenuOpen} class="p-2 rounded-lg bg-gray-800 text-gray-200 hover:bg-gray-700 transition cursor-pointer focus:outline-none" aria-label="Toggle menu">
+          {#if isMobileMenuOpen}✕{:else}☰{/if}
         </button>
       </div>
     </nav>
 
-    <!-- Mobile Dropdown Menu -->
     {#if isMobileMenuOpen}
       <div class="md:hidden bg-gray-900 border-t border-gray-800 px-6 py-4 flex flex-col gap-3 shadow-xl">
         <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'home' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'home'; isMobileMenuOpen = false; }}>Home</button>
         <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'teachers' && activeSubjectFilter === 'all' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { activeSubjectFilter = 'all'; currentView = 'teachers'; isMobileMenuOpen = false; }}>Teachers</button>
+        <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'courses' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'courses'; isMobileMenuOpen = false; }}>Courses</button>
         <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'about' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'about'; isMobileMenuOpen = false; }}>About</button>
         <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'contact' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'contact'; isMobileMenuOpen = false; }}>Contact Us</button>
 
@@ -156,7 +183,24 @@
       <TeacherProfile 
         teacher={selectedTeacher} 
         {currentUser} 
+        courses={coursesData}
         onBack={() => currentView = 'teachers'} 
+        onAddCourse={() => isCourseModalOpen = true}
+        onViewCourse={handleViewCourseFromTeacher}
+      />
+    {:else if currentView === 'courses'}
+      <Courses 
+        courses={coursesData} 
+        teachers={teachersData} 
+        {currentUser}
+        content={contentData}
+        {purchasedCourses}
+        {preselectedCourseId}
+        onPurchase={handlePurchase}
+        onAddCourse={() => isCourseModalOpen = true}
+        onAddContent={(id: string) => { activeCourseId = id; isContentModalOpen = true; }}
+        onContentAdded={handleContentAdded}
+        onClearPreselected={() => preselectedCourseId = null}
       />
     {:else if currentView === 'about'}
       <About />
@@ -173,3 +217,21 @@
 </div>
 
 <AuthModal isOpen={isSignupModalOpen} onClose={() => isSignupModalOpen = false} onLoginSuccess={handleLoginSuccess} />
+
+{#if isCourseModalOpen && currentUser}
+  <AddCourseModal 
+    isOpen={isCourseModalOpen} 
+    onClose={() => isCourseModalOpen = false} 
+    {currentUser} 
+    onCourseAdded={handleCourseAdded} 
+  />
+{/if}
+
+{#if isContentModalOpen && activeCourseId && currentUser}
+  <AddContentModal 
+    isOpen={isContentModalOpen} 
+    onClose={() => isContentModalOpen = false} 
+    courseId={activeCourseId}
+    onContentAdded={handleContentAdded}
+  />
+{/if}

@@ -1,4 +1,4 @@
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyY7ivyJYKlrR_s0r17lJP52qbkKSCcXSilkuvdVuBtgosp7cKEVSEQi8JS_DpUImFufg/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzxtiPy1jymnnDHflEhAepciQBTK-69WX59Ahg2rfqUAJbg1l06Kyl38tTuCyJHd99Zyw/exec';
 
 // 1. GET FUNCTION (Optimized to request only specific data)
 export async function GET({ url }) {

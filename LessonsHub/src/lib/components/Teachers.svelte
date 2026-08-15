@@ -46,7 +46,6 @@
         {@const tImage = teacher.image || teacher.Image || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150'}
         {@const tPrice = teacher.price || teacher.Price || '150'}
 
-        <!-- ✅ CHANGED TO BUTTON: Clicking the whole card opens the profile -->
         <button 
           onclick={() => onSelectTeacher(teacher)}
           class="border border-gray-200 dark:border-gray-800 p-5 rounded-xl bg-white dark:bg-gray-900 shadow-sm text-left transition-all hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-700 cursor-pointer w-full"
