@@ -6,6 +6,7 @@
   import Courses from '$lib/components/Courses.svelte';
   import AddCourseModal from '$lib/components/AddCourseModal.svelte';
   import AddContentModal from '$lib/components/AddContentModal.svelte';
+  import AddBookModal from '$lib/components/AddBookModal.svelte'; // ✅ Added
   import About from '$lib/components/About.svelte';
   import ContactUs from '$lib/components/ContactUs.svelte';
   import AuthModal from '$lib/components/AuthModal.svelte';
@@ -19,15 +20,16 @@
   let isSignupModalOpen = $state(false);
   let isCourseModalOpen = $state(false);
   let isContentModalOpen = $state(false);
+  let isBookModalOpen = $state(false); // ✅ Added
   let activeCourseId = $state<string | null>(null);
 
   let teachersData = $state<any[]>([]);
   let coursesData = $state<any[]>([]);
-  let booksData = $state<any[]>([]);
+  let booksData = $state<any[]>([]); // Already existed, but now actively used for UI
   let contentData = $state<any[]>([]); 
   let purchasedCourses = $state<string[]>([]); 
   let selectedTeacher = $state<any>(null);
-  let preselectedCourseId = $state<string | null>(null); // ✅ NEW: For deep linking from teacher profile
+  let preselectedCourseId = $state<string | null>(null);
 
   onMount(() => {
     isDarkMode = document.documentElement.classList.contains('dark');
@@ -102,11 +104,15 @@
     contentData = [...contentData, newContent];
   }
 
-  // ✅ NEW: Handles clicking "View" on a teacher profile to jump to the course page
   function handleViewCourseFromTeacher(courseId: string) {
     preselectedCourseId = courseId;
     currentView = 'courses';
     window.scrollTo(0, 0);
+  }
+
+  // ✅ NEW: Handle adding a book
+  function handleBookAdded(newBook: any) {
+    booksData = [...booksData, newBook];
   }
 </script>
 
@@ -184,9 +190,11 @@
         teacher={selectedTeacher} 
         {currentUser} 
         courses={coursesData}
+        books={booksData}
         onBack={() => currentView = 'teachers'} 
         onAddCourse={() => isCourseModalOpen = true}
         onViewCourse={handleViewCourseFromTeacher}
+        onAddBook={() => isBookModalOpen = true}
       />
     {:else if currentView === 'courses'}
       <Courses 
@@ -195,12 +203,12 @@
         {currentUser}
         content={contentData}
         {purchasedCourses}
-        {preselectedCourseId}
+        preselectedCourseId={preselectedCourseId}
+        onClearPreselected={() => preselectedCourseId = null}
         onPurchase={handlePurchase}
         onAddCourse={() => isCourseModalOpen = true}
         onAddContent={(id: string) => { activeCourseId = id; isContentModalOpen = true; }}
         onContentAdded={handleContentAdded}
-        onClearPreselected={() => preselectedCourseId = null}
       />
     {:else if currentView === 'about'}
       <About />
@@ -233,5 +241,15 @@
     onClose={() => isContentModalOpen = false} 
     courseId={activeCourseId}
     onContentAdded={handleContentAdded}
+  />
+{/if}
+
+<!-- ✅ NEW: Book Modal -->
+{#if isBookModalOpen && currentUser}
+  <AddBookModal 
+    isOpen={isBookModalOpen} 
+    onClose={() => isBookModalOpen = false} 
+    {currentUser} 
+    onBookAdded={handleBookAdded} 
   />
 {/if}

@@ -1,20 +1,23 @@
 <script lang="ts">
-  // ✅ Added courses and onViewCourse to props, removed content logic
-  let { teacher, currentUser, onBack, courses = [], onAddCourse, onViewCourse } = $props();
+  // ✅ Added books and onAddBook to props
+  let { teacher, currentUser, onBack, courses = [], books = [], onAddCourse, onViewCourse, onAddBook } = $props();
 
   let existingBookings = $state<any[]>([]);
   let bookingStatus = $state<string>('');
   let loadingSlots = $state<string | null>(null);
 
-  // Get teacher's courses
+  // Filter data specifically for this teacher
   let teacherCourses = $derived(courses.filter(c => c.teacherId === (teacher.id || teacher.ID)));
+  let teacherBooks = $derived(books.filter(b => (b.teacherId || b.teacherID) === (teacher.id || teacher.ID)));
 
   function parseSlot(slotString: string) {
     const match = slotString.match(/(.*?)(?:\s*\((.*?)\))?$/);
     const time = (match ? match[1] : slotString).trim();
     const daysStr = match && match[2] ? match[2].trim() : null;
     let days = ['Any Day'];
-    if (daysStr) { days = daysStr.split(',').map(d => d.trim()); }
+    if (daysStr) {
+      days = daysStr.split(',').map(d => d.trim());
+    }
     return { time, days };
   }
 
@@ -49,7 +52,16 @@
       const response = await fetch('/api/data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'book', booking: { teacherId: teacher.id || teacher.ID, userId: currentUser.id, userName: currentUser.name, slot: finalSlotString, createdAt: new Date().toISOString() } })
+        body: JSON.stringify({ 
+          type: 'book', 
+          booking: { 
+            teacherId: teacher.id || teacher.ID, 
+            userId: currentUser.id, 
+            userName: currentUser.name, 
+            slot: finalSlotString, 
+            createdAt: new Date().toISOString() 
+          } 
+        })
       });
       const result = await response.json();
       if (result.success) { existingBookings = [...existingBookings, result.booking]; bookingStatus = `Successfully booked: ${finalSlotString}!`; }
@@ -65,6 +77,7 @@
   </button>
 
   {#if teacher}
+    <!-- Teacher Header -->
     <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm mb-8 flex flex-col md:flex-row gap-6 items-start">
       <img src={teacher.image || teacher.Image} alt={teacher.name} class="w-28 h-28 rounded-2xl object-cover bg-gray-200 dark:bg-gray-800 shadow-md" />
       <div class="flex-1">
@@ -76,8 +89,11 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- LEFT COLUMN: Booking Slots -->
       <div class="lg:col-span-2">
         <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 border-b border-gray-200 dark:border-gray-800 pb-2">📅 Book a Private Session</h2>
+        
         <div class="space-y-4">
           {#each rawSlots as rawSlot}
             {@const parsed = parseSlot(rawSlot)}
@@ -88,7 +104,18 @@
                   {@const finalSlotString = `${parsed.time} - ${day}`}
                   {@const isTaken = existingBookings.some(b => b.slot === finalSlotString)}
                   {@const isLoading = loadingSlots === finalSlotString}
-                  <button disabled={isTaken || isLoading} onclick={() => bookSlot(parsed.time, day)} class="px-4 py-2 rounded-lg text-sm font-medium transition border {isTaken ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed line-through border-gray-200 dark:border-gray-700' : isLoading ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 cursor-wait border-blue-300' : 'bg-gray-50 dark:bg-gray-800 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-gray-700 dark:text-gray-300 cursor-pointer border-gray-300 dark:border-gray-600'}">
+                  
+                  <button 
+                    disabled={isTaken || isLoading}
+                    onclick={() => bookSlot(parsed.time, day)}
+                    class="px-4 py-2 rounded-lg text-sm font-medium transition border
+                      {isTaken 
+                        ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed line-through border-gray-200 dark:border-gray-700' 
+                        : isLoading 
+                          ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 cursor-wait border-blue-300' 
+                          : 'bg-gray-50 dark:bg-gray-800 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-gray-700 dark:text-gray-300 cursor-pointer border-gray-300 dark:border-gray-600'
+                      }"
+                  >
                     {isTaken ? '✕ ' + day + ' (Booked)' : isLoading ? 'Booking...' : '✔ ' + day}
                   </button>
                 {/each}
@@ -96,13 +123,18 @@
             </div>
           {/each}
         </div>
+
         {#if bookingStatus}
-          <div class="mt-4 p-3 rounded-xl text-sm font-medium {bookingStatus.includes('Successfully') ? 'bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800' : 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800'}">{bookingStatus}</div>
+          <div class="mt-4 p-3 rounded-xl text-sm font-medium {bookingStatus.includes('Successfully') ? 'bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800' : 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800'}">
+            {bookingStatus}
+          </div>
         {/if}
       </div>
 
-      <!-- ✅ UPDATED RIGHT COLUMN: Links to Courses Page -->
+      <!-- RIGHT COLUMN: Courses & Books -->
       <div class="space-y-8">
+        
+        <!-- Courses Section -->
         <div>
           <div class="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-gray-800 pb-2">
             <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">📁 Courses</h2>
@@ -119,7 +151,6 @@
                     <h3 class="font-bold text-sm text-gray-900 dark:text-gray-100">{course.title}</h3>
                     <p class="text-green-600 dark:text-green-400 text-xs font-bold">{course.price} EGP</p>
                   </div>
-                  <!-- ✅ THIS BUTTON LINKS TO THE COURSES PAGE -->
                   <button 
                     onclick={() => onViewCourse(course.id || course.ID)}
                     class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg font-semibold hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-blue-900 dark:hover:text-blue-300 transition cursor-pointer"
@@ -136,13 +167,46 @@
           {/if}
         </div>
 
+        <!-- ✅ NEW: Recommended Books Section -->
         <div>
-          <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 border-b border-gray-200 dark:border-gray-800 pb-2">📘 Books & Resources</h2>
-          <div class="bg-gray-50 dark:bg-gray-800/50 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-6 text-center">
-            <p class="text-gray-500 dark:text-gray-400 text-sm italic">Recommended books will appear here.</p>
+          <div class="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-gray-800 pb-2">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">📘 Recommended Books</h2>
+            {#if currentUser && currentUser.role === 'teacher' && (currentUser.id === (teacher.id || teacher.ID))}
+              <button onclick={onAddBook} class="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/50 transition cursor-pointer">+ Add</button>
+            {/if}
           </div>
+          
+          {#if teacherBooks.length > 0}
+            <div class="space-y-3">
+              {#each teacherBooks as book}
+                <a href={book.link || book.Link} target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-3 transition hover:shadow-md hover:border-blue-300 dark:hover:border-blue-700 group">
+                  <div class="flex gap-3">
+                    <img src={book.image || book.Image || 'https://placehold.co/60x80/e2e8f0/64748b?text=Book'} alt={book.title} class="w-12 h-16 rounded-md object-cover bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
+                    <div class="flex-1 min-w-0">
+                      <h4 class="font-bold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate">{book.title || book.Title}</h4>
+                      {#if book.description || book.Description}
+                        <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mt-0.5">{book.description || book.Description}</p>
+                      {/if}
+                      <div class="flex items-center gap-2 mt-1">
+                        <span class="text-green-600 dark:text-green-400 text-xs font-bold">
+                          {(book.price === '0' || book.Price === '0') ? 'Free' : `${book.price || book.Price} EGP`}
+                        </span>
+                        <span class="text-gray-400 text-xs">↗ View Book</span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              {/each}
+            </div>
+          {:else}
+            <div class="bg-gray-50 dark:bg-gray-800/50 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-6 text-center">
+              <p class="text-gray-500 dark:text-gray-400 text-sm italic">No books recommended yet.</p>
+            </div>
+          {/if}
         </div>
+
       </div>
     </div>
   {/if}
 </div>
+
