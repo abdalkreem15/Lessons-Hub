@@ -6,7 +6,7 @@
   import Courses from '$lib/components/Courses.svelte';
   import AddCourseModal from '$lib/components/AddCourseModal.svelte';
   import AddContentModal from '$lib/components/AddContentModal.svelte';
-  import AddBookModal from '$lib/components/AddBookModal.svelte'; // ✅ Added
+  import AddBookModal from '$lib/components/AddBookModal.svelte';
   import About from '$lib/components/About.svelte';
   import ContactUs from '$lib/components/ContactUs.svelte';
   import AuthModal from '$lib/components/AuthModal.svelte';
@@ -20,14 +20,22 @@
   let isSignupModalOpen = $state(false);
   let isCourseModalOpen = $state(false);
   let isContentModalOpen = $state(false);
-  let isBookModalOpen = $state(false); // ✅ Added
+  let isBookModalOpen = $state(false);
   let activeCourseId = $state<string | null>(null);
 
   let teachersData = $state<any[]>([]);
   let coursesData = $state<any[]>([]);
-  let booksData = $state<any[]>([]); // Already existed, but now actively used for UI
-  let contentData = $state<any[]>([]); 
-  let purchasedCourses = $state<string[]>([]); 
+  let booksData = $state<any[]>([]);
+  let contentData = $state<any[]>([]);
+  
+  // ✅ UPDATED: Now tracks raw purchase objects from the database
+  let userPurchases = $state<any[]>([]);
+  
+  // ✅ NEW: A fast derived array of just the IDs the current user bought
+  let purchasedCourseIds = $derived(
+    currentUser?.id ? userPurchases.filter(p => p.userId === currentUser!.id).map(p => p.courseId) : []
+  );
+
   let selectedTeacher = $state<any>(null);
   let preselectedCourseId = $state<string | null>(null);
 
@@ -38,18 +46,15 @@
       currentUser = JSON.parse(savedUser);
     }
 
-    const savedPurchases = localStorage.getItem('purchasedCourses');
-    if (savedPurchases) {
-      purchasedCourses = JSON.parse(savedPurchases);
-    }
-
-    fetch('/api/data?type=teachers,courses,books,content')
+    // ✅ UPDATED: Added 'purchases' to the fetch request
+    fetch('/api/data?type=teachers,courses,books,content,purchases')
       .then(res => res.json())
       .then(data => {
         if (data.teachers) teachersData = data.teachers;
         if (data.courses) coursesData = data.courses;
         if (data.books) booksData = data.books;
         if (data.content) contentData = data.content;
+        if (data.purchases) userPurchases = data.purchases; // ✅ Save DB purchases
       })
       .catch(err => console.error("Failed to load sheet data:", err));
   });
@@ -90,16 +95,6 @@
     coursesData = [...coursesData, newCourse];
   }
 
-  function handlePurchase(courseId: string) {
-    if (!currentUser) {
-      alert('Please sign in to purchase this course.');
-      return;
-    }
-    const newPurchases = [...purchasedCourses, courseId];
-    purchasedCourses = newPurchases;
-    localStorage.setItem('purchasedCourses', JSON.stringify(newPurchases));
-  }
-
   function handleContentAdded(newContent: any) {
     contentData = [...contentData, newContent];
   }
@@ -110,9 +105,42 @@
     window.scrollTo(0, 0);
   }
 
-  // ✅ NEW: Handle adding a book
   function handleBookAdded(newBook: any) {
     booksData = [...booksData, newBook];
+  }
+
+  // ✅ UPDATED: Now saves permanently to Google Sheets backend
+  async function handlePurchase(courseId: string) {
+    if (!currentUser) {
+      alert('Please sign in to purchase this course.');
+      return;
+    }
+    
+    try {
+      const res = await fetch('/api/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          type: 'purchase', 
+          userId: currentUser.id, 
+          courseId: courseId 
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        // Instantly update UI locally without needing to refresh
+        userPurchases = [...userPurchases, { 
+          id: data.purchaseId, 
+          userId: currentUser.id, 
+          courseId: courseId 
+        }];
+      } else {
+        alert(data.message || "Purchase failed.");
+      }
+    } catch (err) {
+      alert("Network error. Try again.");
+    }
   }
 </script>
 
@@ -202,7 +230,7 @@
         teachers={teachersData} 
         {currentUser}
         content={contentData}
-        {purchasedCourses}
+        purchasedCourseIds={purchasedCourseIds}
         preselectedCourseId={preselectedCourseId}
         onClearPreselected={() => preselectedCourseId = null}
         onPurchase={handlePurchase}
@@ -227,29 +255,13 @@
 <AuthModal isOpen={isSignupModalOpen} onClose={() => isSignupModalOpen = false} onLoginSuccess={handleLoginSuccess} />
 
 {#if isCourseModalOpen && currentUser}
-  <AddCourseModal 
-    isOpen={isCourseModalOpen} 
-    onClose={() => isCourseModalOpen = false} 
-    {currentUser} 
-    onCourseAdded={handleCourseAdded} 
-  />
+  <AddCourseModal isOpen={isCourseModalOpen} onClose={() => isCourseModalOpen = false} {currentUser} onCourseAdded={handleCourseAdded} />
 {/if}
 
 {#if isContentModalOpen && activeCourseId && currentUser}
-  <AddContentModal 
-    isOpen={isContentModalOpen} 
-    onClose={() => isContentModalOpen = false} 
-    courseId={activeCourseId}
-    onContentAdded={handleContentAdded}
-  />
+  <AddContentModal isOpen={isContentModalOpen} onClose={() => isContentModalOpen = false} courseId={activeCourseId} onContentAdded={handleContentAdded} />
 {/if}
 
-<!-- ✅ NEW: Book Modal -->
 {#if isBookModalOpen && currentUser}
-  <AddBookModal 
-    isOpen={isBookModalOpen} 
-    onClose={() => isBookModalOpen = false} 
-    {currentUser} 
-    onBookAdded={handleBookAdded} 
-  />
+  <AddBookModal isOpen={isBookModalOpen} onClose={() => isBookModalOpen = false} {currentUser} onBookAdded={handleBookAdded} />
 {/if}

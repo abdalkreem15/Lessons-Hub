@@ -4,7 +4,7 @@
     teachers = [], 
     currentUser, 
     content = [], 
-    purchasedCourses = [], 
+    purchasedCourseIds = [], // ✅ UPDATED: Now receives IDs derived from DB
     preselectedCourseId = null, 
     onClearPreselected, 
     onPurchase, 
@@ -16,8 +16,7 @@
   let selectedTeacherId = $state('all');
   let selectedCourse = $state<any>(null);
 
-  // Local state to allow instant UI updates when adding content
-  let localContent = $derived(content || []);
+  let localContent = $derived.by(() => [...(content || [])]);
 
   // Auto-open course if linked from Teacher Profile
   $effect(() => {
@@ -55,13 +54,13 @@
     window.scrollTo(0, 0);
   }
 
-  // Access Control
+  // ✅ Access Control (Logic remains the same, just referencing the new prop name)
   function canViewContent(course: any) {
     const cId = course.id || course.ID;
     const cTeacherId = course.teacherId || course.teacherID;
     if (!currentUser) return false;
     if (currentUser.role === 'teacher' && currentUser.id === cTeacherId) return true;
-    if (purchasedCourses.includes(cId)) return true;
+    if (purchasedCourseIds.includes(cId)) return true;
     return false;
   }
 
@@ -93,9 +92,7 @@
 
 <div class="p-6">
   {#if selectedCourse}
-    <!-- ========================================== -->
     <!-- COURSE PROFILE VIEW -->
-    <!-- ========================================== -->
     {@const cId = selectedCourse.id || selectedCourse.ID}
     {@const cTeacherId = selectedCourse.teacherId || selectedCourse.teacherID}
     {@const isOwner = currentUser && currentUser.role === 'teacher' && currentUser.id === cTeacherId}
@@ -185,9 +182,7 @@
     </div>
 
   {:else}
-    <!-- ========================================== -->
     <!-- DEFAULT GRID VIEW -->
-    <!-- ========================================== -->
     <div class="mb-4">
       <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Available Courses</h2>
       <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">Browse course materials and lessons created by our teachers.</p>
@@ -202,9 +197,7 @@
         {/each}
 
         {#if currentUser && currentUser.role === 'teacher'}
-          <button onclick={onAddCourse} class="ml-auto px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer bg-green-600 hover:bg-green-700 text-white shadow-sm">
-            + Add Course
-          </button>
+          <button onclick={onAddCourse} class="ml-auto px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer bg-green-600 hover:bg-green-700 text-white shadow-sm">+ Add Course</button>
         {/if}
       </div>
     {:else if currentUser && currentUser.role === 'teacher'}
@@ -229,9 +222,7 @@
           >
             <div>
               <div class="flex gap-4 items-start">
-                <div class="w-16 h-16 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-2xl flex-shrink-0">
-                  📁
-                </div>
+                <div class="w-16 h-16 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-2xl flex-shrink-0">📁</div>
                 <div class="flex-1">
                   <h3 class="font-bold text-lg text-gray-900 dark:text-gray-100 leading-tight">{course.title}</h3>
                   <p class="text-blue-600 dark:text-blue-400 text-sm font-medium mt-1">By {getTeacherName(cTeacherId)}</p>
@@ -244,7 +235,7 @@
               
               {#if currentUser && currentUser.role === 'teacher' && currentUser.id === cTeacherId}
                 <div class="text-xs font-semibold text-blue-600 dark:text-blue-400">Manage →</div>
-              {:else if purchasedCourses.includes(cId)}
+              {:else if purchasedCourseIds.includes(cId)}
                 <div class="text-xs font-semibold text-green-600 dark:text-green-400">✅ Unlocked</div>
               {:else}
                 <div class="text-xs font-semibold text-blue-600 dark:text-blue-400">View Course →</div>
