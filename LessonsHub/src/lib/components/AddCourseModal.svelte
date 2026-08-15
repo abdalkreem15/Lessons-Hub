@@ -52,7 +52,7 @@
 
 {#if isOpen}
   <div class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
+    <div class="bg-orange-50 dark:bg-slate-900 border border-orange-200 dark:border-slate-700 rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
       <button onclick={onClose} class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition cursor-pointer text-lg font-bold p-1">✕</button>
 
       <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">Add New Course</h2>
@@ -65,20 +65,20 @@
       <form onsubmit={handleSubmit} class="space-y-4">
         <div>
           <label for="course-title" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Course Title</label>
-          <input type="text" id="course-title" bind:value={title} required class="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g., Algebra Basics" />
+          <input type="text" id="course-title" bind:value={title} required class="w-full border border-orange-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none" placeholder="e.g., Algebra Basics" />
         </div>
 
         <div>
           <label for="course-desc" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-          <textarea id="course-desc" bind:value={description} rows="3" required class="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none" placeholder="What will students learn?"></textarea>
+          <textarea id="course-desc" bind:value={description} rows="3" required class="w-full border border-orange-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none resize-none" placeholder="What will students learn?"></textarea>
         </div>
 
         <div>
           <label for="course-price" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Price (EGP)</label>
-          <input type="text" inputmode="numeric" id="course-price" bind:value={price} required class="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="150" />
+          <input type="text" inputmode="numeric" id="course-price" bind:value={price} required class="w-full border border-orange-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none" placeholder="150" />
         </div>
 
-        <button type="submit" disabled={loading} class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2.5 rounded-xl transition cursor-pointer text-sm shadow-sm">
+        <button type="submit" disabled={loading} class="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-400 text-white font-semibold py-2.5 rounded-xl transition cursor-pointer text-sm shadow-sm">
           {loading ? 'Saving...' : 'Publish Course'}
         </button>
       </form>

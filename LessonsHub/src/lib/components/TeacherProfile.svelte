@@ -72,17 +72,17 @@
 </script>
 
 <div class="max-w-4xl mx-auto">
-  <button onclick={onBack} class="mb-6 flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition cursor-pointer font-medium text-sm">
+  <button onclick={onBack} class="mb-6 flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-teal-600 dark:hover:text-orange-400 transition cursor-pointer font-medium text-sm">
     ← Back to All Teachers
   </button>
 
   {#if teacher}
     <!-- Teacher Header -->
-    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm mb-8 flex flex-col md:flex-row gap-6 items-start">
-      <img src={teacher.image || teacher.Image} alt={teacher.name} class="w-28 h-28 rounded-2xl object-cover bg-gray-200 dark:bg-gray-800 shadow-md" />
+    <div class="bg-orange-50 dark:bg-slate-900 border border-orange-200 dark:border-slate-700 rounded-2xl p-6 shadow-sm mb-8 flex flex-col md:flex-row gap-6 items-start">
+      <img src={teacher.image || teacher.Image} alt={teacher.name} class="w-28 h-28 rounded-2xl object-cover bg-orange-200 dark:bg-slate-800 shadow-md" />
       <div class="flex-1">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">{teacher.name || teacher.Name}</h1>
-        <p class="text-blue-600 dark:text-blue-400 text-lg font-medium mt-1">{teacher.subject || teacher.Subject}</p>
+        <p class="text-teal-600 dark:text-orange-400 text-lg font-medium mt-1">{teacher.subject || teacher.Subject}</p>
         <p class="text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">{teacher.bio || teacher.Bio}</p>
         <div class="mt-4 text-2xl font-bold text-green-600 dark:text-green-400">{teacher.price || teacher.Price} EGP <span class="text-sm font-normal text-gray-500">/ hour</span></div>
       </div>
@@ -92,12 +92,12 @@
       
       <!-- LEFT COLUMN: Booking Slots -->
       <div class="lg:col-span-2">
-        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 border-b border-gray-200 dark:border-gray-800 pb-2">📅 Book a Private Session</h2>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 border-b border-orange-200 dark:border-slate-700 pb-2">📅 Book a Private Session</h2>
         
         <div class="space-y-4">
           {#each rawSlots as rawSlot}
             {@const parsed = parseSlot(rawSlot)}
-            <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
+            <div class="bg-orange-50 dark:bg-slate-900 border border-orange-200 dark:border-slate-700 rounded-xl p-4">
               <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-3 text-base">🕐 {parsed.time}</h3>
               <div class="flex flex-wrap gap-2">
                 {#each parsed.days as day}
@@ -139,21 +139,21 @@
           <div class="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-gray-800 pb-2">
             <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">📁 Courses</h2>
             {#if currentUser && currentUser.role === 'teacher' && (currentUser.id === (teacher.id || teacher.ID))}
-              <button onclick={onAddCourse} class="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/50 transition cursor-pointer">+ New</button>
+              <button onclick={onAddCourse} class="text-xs bg-teal-100 dark:bg-teal-900/30 text-teal-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-teal-200 dark:hover:bg-teal-900/50 transition cursor-pointer">+ New</button>
             {/if}
           </div>
           
           {#if teacherCourses.length > 0}
             <div class="space-y-3">
               {#each teacherCourses as course}
-                <div class="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-4 flex justify-between items-center">
+                <div class="bg-orange-50 dark:bg-slate-800/50 border border-orange-200 dark:border-slate-700 rounded-xl p-4 flex justify-between items-center">
                   <div>
                     <h3 class="font-bold text-sm text-gray-900 dark:text-gray-100">{course.title}</h3>
                     <p class="text-green-600 dark:text-green-400 text-xs font-bold">{course.price} EGP</p>
                   </div>
                   <button 
                     onclick={() => onViewCourse(course.id || course.ID)}
-                    class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg font-semibold hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-blue-900 dark:hover:text-blue-300 transition cursor-pointer"
+                    class="text-xs bg-orange-100 dark:bg-slate-700 text-orange-600 dark:text-orange-300 px-3 py-1.5 rounded-lg font-semibold hover:bg-teal-100 hover:text-teal-600 dark:hover:bg-teal-900 dark:hover:text-teal-300 transition cursor-pointer"
                   >
                     View →
                   </button>
@@ -172,18 +172,18 @@
           <div class="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-gray-800 pb-2">
             <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">📘 Recommended Books</h2>
             {#if currentUser && currentUser.role === 'teacher' && (currentUser.id === (teacher.id || teacher.ID))}
-              <button onclick={onAddBook} class="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/50 transition cursor-pointer">+ Add</button>
+              <button onclick={onAddBook} class="text-xs bg-teal-100 dark:bg-teal-900/30 text-teal-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-teal-200 dark:hover:bg-teal-900/50 transition cursor-pointer">+ Add</button>
             {/if}
           </div>
           
           {#if teacherBooks.length > 0}
             <div class="space-y-3">
               {#each teacherBooks as book}
-                <a href={book.link || book.Link} target="_blank" rel="noopener noreferrer" class="block bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-3 transition hover:shadow-md hover:border-blue-300 dark:hover:border-blue-700 group">
+                <a href={book.link || book.Link} target="_blank" rel="noopener noreferrer" class="block bg-orange-50 dark:bg-slate-800/50 border border-orange-200 dark:border-slate-700 rounded-xl p-3 transition hover:shadow-md hover:border-teal-300 dark:hover:border-teal-700 group">
                   <div class="flex gap-3">
-                    <img src={book.image || book.Image || 'https://placehold.co/60x80/e2e8f0/64748b?text=Book'} alt={book.title} class="w-12 h-16 rounded-md object-cover bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
+                    <img src={book.image || book.Image || 'https://placehold.co/60x80/e2e8f0/64748b?text=Book'} alt={book.title} class="w-12 h-16 rounded-md object-cover bg-orange-200 dark:bg-slate-700 flex-shrink-0" />
                     <div class="flex-1 min-w-0">
-                      <h4 class="font-bold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate">{book.title || book.Title}</h4>
+                      <h4 class="font-bold text-sm text-gray-900 dark:text-gray-100 group-hover:text-teal-600 dark:group-hover:text-orange-400 truncate">{book.title || book.Title}</h4>
                       {#if book.description || book.Description}
                         <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mt-0.5">{book.description || book.Description}</p>
                       {/if}

@@ -99,16 +99,16 @@
     {@const hasAccess = canViewContent(selectedCourse)}
     {@const courseContent = localContent.filter(c => c.courseId === cId)}
 
-    <button onclick={() => selectedCourse = null} class="mb-6 flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition cursor-pointer font-medium text-sm">
+    <button onclick={() => selectedCourse = null} class="mb-6 flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-teal-600 dark:hover:text-orange-400 transition cursor-pointer font-medium text-sm">
       ← Back to All Courses
     </button>
 
-    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm mb-8">
+    <div class="bg-orange-50 dark:bg-slate-900 border border-orange-200 dark:border-slate-700 rounded-2xl p-6 shadow-sm mb-8">
       <div class="flex items-start gap-4">
         <div class="w-16 h-16 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-2xl flex-shrink-0">📁</div>
         <div class="flex-1">
           <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">{selectedCourse.title}</h1>
-          <p class="text-blue-600 dark:text-blue-400 text-lg font-medium mt-1">By {getTeacherName(cTeacherId)}</p>
+          <p class="text-teal-600 dark:text-orange-400 text-lg font-medium mt-1">By {getTeacherName(cTeacherId)}</p>
           <p class="text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">{selectedCourse.description}</p>
         </div>
       </div>
@@ -119,13 +119,13 @@
       
       <!-- LEFT: Course Content -->
       <div class="lg:col-span-2">
-        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 border-b border-gray-200 dark:border-gray-800 pb-2">📑 Course Material</h2>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 border-b border-orange-200 dark:border-slate-700 pb-2">📑 Course Material</h2>
         
         {#if hasAccess}
           {#if courseContent.length > 0}
             <div class="space-y-4">
               {#each courseContent as item}
-                <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4">
+                <div class="bg-orange-50 dark:bg-slate-900 border border-orange-200 dark:border-slate-700 rounded-xl p-4">
                   {#if item.type === 'text'}
                     <div class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{@html renderMarkdown(item.content)}</div>
                   {:else if item.type === 'video'}
@@ -139,7 +139,7 @@
               {/each}
             </div>
           {:else}
-            <div class="bg-gray-50 dark:bg-gray-800/50 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-10 text-center">
+            <div class="bg-orange-100 dark:bg-slate-800/50 border-2 border-dashed border-orange-300 dark:border-slate-700 rounded-xl p-10 text-center">
               <p class="text-gray-500 dark:text-gray-400 italic">No content added yet.</p>
             </div>
           {/if}
@@ -147,7 +147,7 @@
           <!-- LOCKED STATE -->
           <div class="space-y-4">
             {#each [1, 2, 3] as i}
-              <div class="bg-gray-100 dark:bg-gray-800 rounded-xl h-40 flex items-center justify-center blur-sm select-none">
+              <div class="bg-orange-100 dark:bg-slate-800 rounded-xl h-40 flex items-center justify-center blur-sm select-none">
                 <span class="text-gray-400 text-4xl">🔒</span>
               </div>
             {/each}
@@ -160,9 +160,9 @@
 
       <!-- RIGHT: Actions & Sidebar -->
       <div class="space-y-6">
-        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 shadow-sm sticky top-24">
+        <div class="bg-orange-50 dark:bg-slate-900 border border-orange-200 dark:border-slate-700 rounded-xl p-5 shadow-sm sticky top-24">
           {#if isOwner}
-            <button onclick={() => onAddContent(cId)} class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition cursor-pointer text-sm shadow-sm mb-3">
+            <button onclick={() => onAddContent(cId)} class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-xl transition cursor-pointer text-sm shadow-sm mb-3">
               + Add Course Content
             </button>
             <p class="text-xs text-center text-gray-400">You own this course. Content is visible to you.</p>
@@ -190,10 +190,10 @@
     
     {#if availableTeachers.length > 0}
       <div class="flex flex-wrap gap-2 mb-6 pb-5 border-b border-gray-100 dark:border-gray-800">
-        <button class="px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer {selectedTeacherId === 'all' ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}" onclick={() => selectedTeacherId = 'all'}>All Teachers</button>
+        <button class="px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer {selectedTeacherId === 'all' ? 'bg-teal-600 text-white shadow-sm' : 'bg-orange-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-orange-200 dark:hover:bg-slate-700'}" onclick={() => selectedTeacherId = 'all'}>All Teachers</button>
         
         {#each availableTeachers as teacher}
-          <button class="px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer {selectedTeacherId === teacher.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}" onclick={() => selectedTeacherId = teacher.id}>📚 {teacher.name}</button>
+          <button class="px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer {selectedTeacherId === teacher.id ? 'bg-teal-600 text-white shadow-sm' : 'bg-orange-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-orange-200 dark:hover:bg-slate-700'}" onclick={() => selectedTeacherId = teacher.id}>📚 {teacher.name}</button>
         {/each}
 
         {#if currentUser && currentUser.role === 'teacher'}
@@ -218,14 +218,14 @@
           
           <button 
             onclick={() => openCourse(course)}
-            class="border border-gray-200 dark:border-gray-800 p-5 rounded-xl bg-white dark:bg-gray-900 shadow-sm flex flex-col justify-between transition-all hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-700 cursor-pointer w-full text-left"
+            class="border border-orange-200 dark:border-slate-700 p-5 rounded-xl bg-orange-50 dark:bg-slate-900 shadow-sm flex flex-col justify-between transition-all hover:shadow-lg hover:border-teal-300 dark:hover:border-teal-700 cursor-pointer w-full text-left"
           >
             <div>
               <div class="flex gap-4 items-start">
-                <div class="w-16 h-16 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-2xl flex-shrink-0">📁</div>
+                <div class="w-16 h-16 rounded-xl bg-orange-100 dark:bg-teal-900/30 flex items-center justify-center text-2xl flex-shrink-0">📁</div>
                 <div class="flex-1">
                   <h3 class="font-bold text-lg text-gray-900 dark:text-gray-100 leading-tight">{course.title}</h3>
-                  <p class="text-blue-600 dark:text-blue-400 text-sm font-medium mt-1">By {getTeacherName(cTeacherId)}</p>
+                  <p class="text-teal-600 dark:text-orange-400 text-sm font-medium mt-1">By {getTeacherName(cTeacherId)}</p>
                   <p class="text-gray-600 dark:text-gray-400 text-sm mt-2 line-clamp-2">{course.description}</p>
                 </div>
               </div>
@@ -234,11 +234,11 @@
               <div class="font-semibold text-green-600 dark:text-green-400 text-sm">{course.price} EGP</div>
               
               {#if currentUser && currentUser.role === 'teacher' && currentUser.id === cTeacherId}
-                <div class="text-xs font-semibold text-blue-600 dark:text-blue-400">Manage →</div>
+                <div class="text-xs font-semibold text-teal-600 dark:text-orange-400">Manage →</div>
               {:else if purchasedCourseIds.includes(cId)}
                 <div class="text-xs font-semibold text-green-600 dark:text-green-400">✅ Unlocked</div>
               {:else}
-                <div class="text-xs font-semibold text-blue-600 dark:text-blue-400">View Course →</div>
+                <div class="text-xs font-semibold text-teal-600 dark:text-orange-400">View Course →</div>
               {/if}
             </div>
           </button>

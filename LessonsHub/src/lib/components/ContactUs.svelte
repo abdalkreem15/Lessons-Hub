@@ -27,7 +27,7 @@
   }
 </script>
 
-<div class="max-w-2xl mx-auto p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm transition-colors">
+<div class="max-w-2xl mx-auto p-6 bg-orange-50 dark:bg-slate-900 border border-orange-200 dark:border-slate-700 rounded-2xl shadow-sm transition-colors">
   <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Contact Us</h2>
   <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">Have questions or need support? Reach out to us directly.</p>
 
@@ -46,7 +46,7 @@
           oninput={(e) => name = e.currentTarget.value}
           disabled={!!currentUser}
           required 
-          class="w-full border border-gray-300 dark:border-gray-700 {currentUser ? 'bg-gray-50 dark:bg-gray-800/50 opacity-75' : 'bg-white dark:bg-gray-800'} text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          class="w-full border border-orange-300 dark:border-slate-700 {currentUser ? 'bg-orange-100 dark:bg-slate-800/50 opacity-75' : 'bg-white dark:bg-slate-800'} text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none resize-none"
           placeholder="Your Name"
         />
       </div>
@@ -60,7 +60,7 @@
           oninput={(e) => email = e.currentTarget.value}
           disabled={!!currentUser}
           required 
-          class="w-full border border-gray-300 dark:border-gray-700 {currentUser ? 'bg-gray-50 dark:bg-gray-800/50 opacity-75' : 'bg-white dark:bg-gray-800'} text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          class="w-full border border-orange-300 dark:border-slate-700 {currentUser ? 'bg-orange-100 dark:bg-slate-800/50 opacity-75' : 'bg-white dark:bg-slate-800'} text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
           placeholder="you@example.com"
         />
       </div>
@@ -72,7 +72,7 @@
           bind:value={message} 
           rows="4" 
           required 
-          class="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          class="w-full border border-orange-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
           placeholder="How can we help you?"
         ></textarea>
       </div>

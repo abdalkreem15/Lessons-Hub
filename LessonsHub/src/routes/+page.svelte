@@ -144,58 +144,58 @@
   }
 </script>
 
-<div class="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col transition-colors duration-200">
-  <header class="bg-gray-900 text-white shadow-md border-b border-gray-800 sticky top-0 z-50">
+<div class="min-h-screen bg-orange-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 flex flex-col transition-colors duration-200">
+  <header class="{isDarkMode ? 'bg-teal-700 text-white border-teal-800' : 'bg-orange-50 text-teal-800 border-orange-200'} shadow-md border-b sticky top-0 z-50 transition-colors duration-200">
     <nav class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
       <button class="font-bold text-xl text-left cursor-pointer" onclick={() => { currentView = 'home'; isMobileMenuOpen = false; }}>
         🎓 LessonsHub
       </button>
       
       <div class="hidden md:flex items-center gap-6">
-        <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'home' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'home'}>Home</button>
-        <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'teachers' && activeSubjectFilter === 'all' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { activeSubjectFilter = 'all'; currentView = 'teachers'; }}>Teachers</button>
-        <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'courses' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'courses'}>Courses</button>
-        <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'about' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'about'}>About</button>
-        <button class="hover:text-blue-400 transition cursor-pointer {currentView === 'contact' ? 'text-blue-400 font-semibold' : ''}" onclick={() => currentView = 'contact'}>Contact Us</button>
+        <button class="{isDarkMode ? 'hover:text-orange-300' : 'hover:text-orange-600'} transition cursor-pointer {currentView === 'home' ? (isDarkMode ? 'text-orange-300' : 'text-orange-600') + ' font-semibold' : ''}" onclick={() => currentView = 'home'}>Home</button>
+        <button class="{isDarkMode ? 'hover:text-orange-300' : 'hover:text-orange-600'} transition cursor-pointer {currentView === 'teachers' && activeSubjectFilter === 'all' ? (isDarkMode ? 'text-orange-300' : 'text-orange-600') + ' font-semibold' : ''}" onclick={() => { activeSubjectFilter = 'all'; currentView = 'teachers'; }}>Teachers</button>
+        <button class="{isDarkMode ? 'hover:text-orange-300' : 'hover:text-orange-600'} transition cursor-pointer {currentView === 'courses' ? (isDarkMode ? 'text-orange-300' : 'text-orange-600') + ' font-semibold' : ''}" onclick={() => currentView = 'courses'}>Courses</button>
+        <button class="{isDarkMode ? 'hover:text-orange-300' : 'hover:text-orange-600'} transition cursor-pointer {currentView === 'about' ? (isDarkMode ? 'text-orange-300' : 'text-orange-600') + ' font-semibold' : ''}" onclick={() => currentView = 'about'}>About</button>
+        <button class="{isDarkMode ? 'hover:text-orange-300' : 'hover:text-orange-600'} transition cursor-pointer {currentView === 'contact' ? (isDarkMode ? 'text-orange-300' : 'text-orange-600') + ' font-semibold' : ''}" onclick={() => currentView = 'contact'}>Contact Us</button>
 
-        <div class="flex items-center gap-3 border-l border-gray-700 pl-6">
+        <div class="flex items-center gap-3 {isDarkMode ? 'border-teal-600' : 'border-orange-300'} border-l pl-6">
           {#if currentUser}
-            <span class="text-xs font-medium bg-gray-800 px-3 py-1.5 rounded-lg text-blue-300">👤 {currentUser.name}</span>
-            <button onclick={handleLogout} class="text-xs bg-red-600/20 hover:bg-red-600/40 text-red-400 px-3 py-1.5 rounded-lg transition cursor-pointer font-medium">Sign Out</button>
+            <span class="text-xs font-medium {isDarkMode ? 'bg-teal-600 text-orange-200' : 'bg-teal-100 text-teal-700'} px-3 py-1.5 rounded-lg">👤 {currentUser.name}</span>
+            <button onclick={handleLogout} class="text-xs {isDarkMode ? 'bg-red-600/20 hover:bg-red-600/40 text-red-200' : 'bg-red-100 hover:bg-red-200 text-red-600'} px-3 py-1.5 rounded-lg transition cursor-pointer font-medium">Sign Out</button>
           {:else}
-            <button onclick={() => isSignupModalOpen = true} class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition cursor-pointer font-medium">Sign In / Register</button>
+            <button onclick={() => isSignupModalOpen = true} class="text-xs bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition cursor-pointer font-medium">Sign In / Register</button>
           {/if}
         </div>
 
-        <button onclick={toggleTheme} class="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition cursor-pointer text-sm" aria-label="Toggle theme">
+        <button onclick={toggleTheme} class="p-2 rounded-lg {isDarkMode ? 'bg-teal-600 hover:bg-teal-600/80' : 'bg-white hover:bg-gray-100 border border-orange-300'} transition cursor-pointer text-sm" aria-label="Toggle theme">
           {#if isDarkMode}☀️{:else}🌙{/if}
         </button>
       </div>
 
       <div class="flex items-center gap-3 md:hidden">
-        <button onclick={toggleTheme} class="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition cursor-pointer text-sm" aria-label="Toggle theme">
+        <button onclick={toggleTheme} class="p-2 rounded-lg {isDarkMode ? 'bg-teal-600 hover:bg-teal-600/80' : 'bg-white hover:bg-gray-100 border border-orange-300'} transition cursor-pointer text-sm" aria-label="Toggle theme">
           {#if isDarkMode}☀️{:else}🌙{/if}
         </button>
-        <button onclick={() => isMobileMenuOpen = !isMobileMenuOpen} class="p-2 rounded-lg bg-gray-800 text-gray-200 hover:bg-gray-700 transition cursor-pointer focus:outline-none" aria-label="Toggle menu">
+        <button onclick={() => isMobileMenuOpen = !isMobileMenuOpen} class="p-2 rounded-lg {isDarkMode ? 'bg-teal-600 hover:bg-teal-600/80 text-white' : 'bg-white hover:bg-gray-100 text-teal-700 border border-orange-300'} transition cursor-pointer focus:outline-none" aria-label="Toggle menu">
           {#if isMobileMenuOpen}✕{:else}☰{/if}
         </button>
       </div>
     </nav>
 
     {#if isMobileMenuOpen}
-      <div class="md:hidden bg-gray-900 border-t border-gray-800 px-6 py-4 flex flex-col gap-3 shadow-xl">
-        <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'home' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'home'; isMobileMenuOpen = false; }}>Home</button>
-        <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'teachers' && activeSubjectFilter === 'all' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { activeSubjectFilter = 'all'; currentView = 'teachers'; isMobileMenuOpen = false; }}>Teachers</button>
-        <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'courses' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'courses'; isMobileMenuOpen = false; }}>Courses</button>
-        <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'about' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'about'; isMobileMenuOpen = false; }}>About</button>
-        <button class="text-left py-2 hover:text-blue-400 transition {currentView === 'contact' ? 'text-blue-400 font-semibold' : ''}" onclick={() => { currentView = 'contact'; isMobileMenuOpen = false; }}>Contact Us</button>
+      <div class="md:hidden {isDarkMode ? 'bg-teal-700 border-teal-600' : 'bg-orange-100 border-orange-300'} border-t px-6 py-4 flex flex-col gap-3 shadow-xl transition-colors duration-200">
+        <button class="text-left py-2 {isDarkMode ? 'hover:text-orange-300' : 'hover:text-orange-600'} transition {currentView === 'home' ? (isDarkMode ? 'text-orange-300' : 'text-orange-600') + ' font-semibold' : ''}" onclick={() => { currentView = 'home'; isMobileMenuOpen = false; }}>Home</button>
+        <button class="text-left py-2 {isDarkMode ? 'hover:text-orange-300' : 'hover:text-orange-600'} transition {currentView === 'teachers' && activeSubjectFilter === 'all' ? (isDarkMode ? 'text-orange-300' : 'text-orange-600') + ' font-semibold' : ''}" onclick={() => { activeSubjectFilter = 'all'; currentView = 'teachers'; isMobileMenuOpen = false; }}>Teachers</button>
+        <button class="text-left py-2 {isDarkMode ? 'hover:text-orange-300' : 'hover:text-orange-600'} transition {currentView === 'courses' ? (isDarkMode ? 'text-orange-300' : 'text-orange-600') + ' font-semibold' : ''}" onclick={() => { currentView = 'courses'; isMobileMenuOpen = false; }}>Courses</button>
+        <button class="text-left py-2 {isDarkMode ? 'hover:text-orange-300' : 'hover:text-orange-600'} transition {currentView === 'about' ? (isDarkMode ? 'text-orange-300' : 'text-orange-600') + ' font-semibold' : ''}" onclick={() => { currentView = 'about'; isMobileMenuOpen = false; }}>About</button>
+        <button class="text-left py-2 {isDarkMode ? 'hover:text-orange-300' : 'hover:text-orange-600'} transition {currentView === 'contact' ? (isDarkMode ? 'text-orange-300' : 'text-orange-600') + ' font-semibold' : ''}" onclick={() => { currentView = 'contact'; isMobileMenuOpen = false; }}>Contact Us</button>
 
-        <div class="pt-3 border-t border-gray-800 flex flex-col gap-2">
+        <div class="pt-3 {isDarkMode ? 'border-teal-600' : 'border-orange-300'} border-t flex flex-col gap-2">
           {#if currentUser}
-            <div class="text-xs font-medium bg-gray-800 px-3 py-2 rounded-lg text-blue-300">👤 {currentUser.name}</div>
-            <button onclick={() => { handleLogout(); isMobileMenuOpen = false; }} class="w-full text-center text-xs bg-red-600/20 hover:bg-red-600/40 text-red-400 py-2 rounded-lg transition font-medium">Sign Out</button>
+            <div class="text-xs font-medium {isDarkMode ? 'bg-teal-600 text-orange-200' : 'bg-teal-100 text-teal-700'} px-3 py-2 rounded-lg">👤 {currentUser.name}</div>
+            <button onclick={() => { handleLogout(); isMobileMenuOpen = false; }} class="w-full text-center text-xs {isDarkMode ? 'bg-red-600/20 hover:bg-red-600/40 text-red-200' : 'bg-red-100 hover:bg-red-200 text-red-600'} py-2 rounded-lg transition font-medium">Sign Out</button>
           {:else}
-            <button onclick={() => { isSignupModalOpen = true; isMobileMenuOpen = false; }} class="w-full text-center text-xs bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg transition font-medium">Sign In / Register</button>
+            <button onclick={() => { isSignupModalOpen = true; isMobileMenuOpen = false; }} class="w-full text-center text-xs bg-orange-500 hover:bg-orange-600 text-white py-2.5 rounded-lg transition font-medium">Sign In / Register</button>
           {/if}
         </div>
       </div>
@@ -245,10 +245,10 @@
     {/if}
   </main>
 
-  <footer class="bg-white dark:bg-gray-900 border-t dark:border-gray-800 py-4 text-center text-gray-500 text-sm transition-colors flex flex-col sm:flex-row justify-center items-center gap-2 px-6">
+  <footer class="bg-orange-100 dark:bg-slate-800 border-t dark:border-slate-700 py-4 text-center text-gray-600 dark:text-gray-300 text-sm transition-colors flex flex-col sm:flex-row justify-center items-center gap-2 px-6">
     <span>&copy; 2026 Private Lessons Platform. All rights reserved.</span>
     <span class="hidden sm:inline">•</span>
-    <a href="https://github.com/abdalkreem15" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">GitHub</a>
+    <a href="https://github.com/abdalkreem15" target="_blank" rel="noopener noreferrer" class="text-teal-700 dark:text-orange-400 hover:underline font-medium">GitHub</a>
   </footer>
 </div>
 

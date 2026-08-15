@@ -1,5 +1,5 @@
 <div class="max-w-2xl mx-auto p-6">
-  <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-8 shadow-sm transition-colors">
+  <div class="bg-orange-50 dark:bg-slate-900 border border-orange-200 dark:border-slate-700 rounded-2xl p-8 shadow-sm transition-colors">
     <h2 class="text-3xl font-extrabold text-gray-900 dark:text-gray-100 mb-4">About LessonsHub</h2>
     
     <div class="space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed text-sm">

@@ -26,10 +26,10 @@
   </div>
   
   {#if availableSubjects.length > 0}
-    <div class="flex flex-wrap gap-2 mb-6 pb-5 border-b border-gray-100 dark:border-gray-800">
-      <button class="px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer {selectedSubjectId === 'all' ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}" onclick={() => onSelectSubjectFilter('all')}>All Subjects</button>
+    <div class="flex flex-wrap gap-2 mb-6 pb-5 border-b border-orange-100 dark:border-slate-700">
+      <button class="px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer {selectedSubjectId === 'all' ? 'bg-teal-600 text-white shadow-sm' : 'bg-orange-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-orange-200 dark:hover:bg-slate-700'}" onclick={() => onSelectSubjectFilter('all')}>All Subjects</button>
       {#each availableSubjects as subject}
-        <button class="px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer {selectedSubjectId === subject.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}" onclick={() => onSelectSubjectFilter(subject.id)}>📚 {subject.name}</button>
+        <button class="px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer {selectedSubjectId === subject.id ? 'bg-teal-600 text-white shadow-sm' : 'bg-orange-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-orange-200 dark:hover:bg-slate-700'}" onclick={() => onSelectSubjectFilter(subject.id)}>📚 {subject.name}</button>
       {/each}
     </div>
   {/if}
@@ -48,7 +48,7 @@
 
         <button 
           onclick={() => onSelectTeacher(teacher)}
-          class="border border-gray-200 dark:border-gray-800 p-5 rounded-xl bg-white dark:bg-gray-900 shadow-sm text-left transition-all hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-700 cursor-pointer w-full"
+          class="border border-orange-200 dark:border-slate-700 p-5 rounded-xl bg-orange-50 dark:bg-slate-900 shadow-sm text-left transition-all hover:shadow-lg hover:border-teal-300 dark:hover:border-teal-700 cursor-pointer w-full"
         >
           <div class="flex gap-4 items-start">
             <img src={tImage} alt={tName} class="w-16 h-16 rounded-full object-cover bg-gray-200 dark:bg-gray-800" />
