@@ -60,7 +60,7 @@
 
 {#if isOpen}
   <div class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-    <div class="card w-full max-w-md p-6 shadow-2xl relative">
+    <div class="card w-full md:w-1/2 max-w-4xl p-6 shadow-2xl relative">
       <button onclick={onClose} class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition cursor-pointer text-lg font-bold p-1" aria-label="Close modal">
         <Icon name="close" size={20} />
       </button>
