@@ -1,41 +1,45 @@
 <script lang="ts">
+  import Icon from '$lib/components/Icon.svelte';
   // Props passed down from the parent page containing the live data
   let { subjects = [], teachers = [], onSelectSubject } = $props();
 
   // If static subjects aren't passed, dynamically extract unique subjects from your live teachers data
   let availableSubjects = $derived(
-    subjects.length > 0 
-      ? subjects 
+    subjects.length > 0
+      ? subjects
       : Array.from(new Set(teachers.map(t => t.subject).filter(Boolean))).map(subjectName => ({
           id: subjectName.toLowerCase().replace(/\s+/g, '-'),
           name: subjectName,
-          icon: '📚' // Default icon for dynamic subjects
+          icon: 'bookOpen' // Default icon for dynamic subjects
         }))
   );
 </script>
 
 <div class="p-6">
   <div class="mb-6">
-    <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Explore Subjects</h2>
-    <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">Select a subject to view available private tutors.</p>
+    <h2 class="section-heading">Explore Subjects</h2>
+    <p class="section-subheading">Select a subject to view available private tutors.</p>
   </div>
-  
+
   {#if availableSubjects.length === 0}
-    <p class="text-gray-500 dark:text-gray-400 italic">No subjects available yet.</p>
+    <p class="text-slate-500 dark:text-slate-400 italic">No subjects available yet.</p>
   {:else}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       {#each availableSubjects as subject}
-        <button 
-          class="p-5 border border-orange-200 dark:border-slate-700 rounded-xl hover:border-teal-500 dark:hover:border-teal-500 text-left bg-orange-50 dark:bg-slate-900 shadow-sm transition flex flex-col justify-between cursor-pointer group"
+        <button
+          class="card card-hover p-5 cursor-pointer group"
           onclick={() => onSelectSubject(subject.id || subject.name)}
         >
           <div>
-            <span class="text-3xl mb-3 block">{subject.icon || '📚'}</span>
-            <h3 class="font-semibold text-lg text-gray-900 dark:text-gray-100 group-hover:text-teal-600 dark:group-hover:text-orange-400 transition">{subject.name}</h3>
+            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+              <Icon name={subject.icon || 'bookOpen'} size={20} class="text-primary" />
+            </div>
+            <h3 class="font-semibold text-lg text-slate-900 dark:text-slate-100 group-hover:text-primary dark:group-hover:text-accent transition">{subject.name}</h3>
           </div>
-          <span class="text-xs text-blue-600 dark:text-blue-400 mt-4 font-medium flex items-center gap-1">
-            View Teachers &rarr;
-          </span>
+          <div class="mt-4 text-xs font-medium text-primary dark:text-accent flex items-center gap-1">
+            View Teachers
+            <Icon name="arrowRightSm" size={14} />
+          </div>
         </button>
       {/each}
     </div>
