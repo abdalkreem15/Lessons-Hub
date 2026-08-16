@@ -154,9 +154,24 @@
 </script>
 
 <div class="w-full mx-auto">
+	<!-- Back to Home -->
+	<div class="mb-4">
+		<button
+			type="button"
+			onclick={() => goto('/')}
+			class="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-800 border-2 border-primary rounded-xl shadow-md text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-primary hover:text-white transition-all duration-200 group"
+			aria-label="Back to home"
+		>
+			<Icon name="arrowLeft" size={18} class="group-hover:-translate-x-1 transition-transform duration-200" />
+			<span>Back to Home</span>
+		</button>
+	</div>
+
 	<div class="card p-8 shadow-2xl">
 		<!-- Header -->
-		<div class="text-center mb-6">
+>>>>>>>
+
+		<div class="text-center mb-8">
 			<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
 				<Icon name={mode === 'register' ? 'userPlus' : 'lock'} size={28} class="text-primary" />
 			</div>
