@@ -31,8 +31,8 @@
 <div class="max-w-6xl mx-auto p-6">
   <div class="card p-8">
     <div class="flex items-center gap-3 mb-6">
-      <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-        <Icon name="chatBubble" size={22} class="text-primary" />
+      <div class="w-10 h-10 rounded-xl bg-primary/10 dark:bg-accent/10 flex items-center justify-center flex-shrink-0">
+        <Icon name="chatBubble" size={22} class="text-primary dark:text-accent" />
       </div>
       <div>
         <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Contact Us</h2>
@@ -50,8 +50,8 @@
         <!-- Contact Info -->
         <div class="lg:col-span-1 space-y-6">
           <div class="flex items-start gap-3">
-            <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Icon name="chatBubble" size={16} class="text-primary" />
+            <div class="w-8 h-8 rounded-lg bg-primary/10 dark:bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <Icon name="chatBubble" size={16} class="text-primary dark:text-accent" />
             </div>
             <div>
               <h3 class="font-semibold text-slate-900 dark:text-slate-100 text-sm mb-1">Email Support</h3>
@@ -60,8 +60,8 @@
           </div>
 
           <div class="flex items-start gap-3">
-            <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Icon name="clock" size={16} class="text-primary" />
+            <div class="w-8 h-8 rounded-lg bg-primary/10 dark:bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <Icon name="clock" size={16} class="text-primary dark:text-accent" />
             </div>
             <div>
               <h3 class="font-semibold text-slate-900 dark:text-slate-100 text-sm mb-1">Response Time</h3>
@@ -70,8 +70,8 @@
           </div>
 
           <div class="flex items-start gap-3">
-            <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Icon name="user" size={16} class="text-primary" />
+            <div class="w-8 h-8 rounded-lg bg-primary/10 dark:bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <Icon name="user" size={16} class="text-primary dark:text-accent" />
             </div>
             <div>
               <h3 class="font-semibold text-slate-900 dark:text-slate-100 text-sm mb-1">Student & Teacher Support</h3>

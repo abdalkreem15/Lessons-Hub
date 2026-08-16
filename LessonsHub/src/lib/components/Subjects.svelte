@@ -31,8 +31,8 @@
           onclick={() => onSelectSubject(subject.id || subject.name)}
         >
           <div>
-            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-              <Icon name={subject.icon || 'bookOpen'} size={20} class="text-primary" />
+            <div class="w-10 h-10 rounded-lg bg-primary/10 dark:bg-accent/10 flex items-center justify-center mb-3">
+              <Icon name={subject.icon || 'bookOpen'} size={20} class="text-primary dark:text-accent" />
             </div>
             <h3 class="font-semibold text-lg text-slate-900 dark:text-slate-100 group-hover:text-primary dark:group-hover:text-accent transition">{subject.name}</h3>
           </div>

@@ -138,10 +138,10 @@
 	<header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm sticky top-0 z-50 transition-colors duration-200">
 		<nav class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
 			<button
-				class="font-bold text-xl text-primary flex items-center gap-2 cursor-pointer"
+				class="font-bold text-xl text-primary dark:text-accent flex items-center gap-2 cursor-pointer"
 				onclick={() => { currentView = 'home'; isMobileMenuOpen = false; }}
 			>
-				<Icon name="graduationCap" size={24} class="text-primary" />
+				<Icon name="graduationCap" size={24} class="text-primary dark:text-accent" />
 				LessonsHub
 			</button>
 
@@ -169,7 +169,7 @@
 
 				<div class="flex items-center gap-3 border-l border-slate-200 dark:border-slate-700 pl-6">
 					{#if $currentUser}
-						<span class="text-xs font-medium bg-primary/10 text-primary px-3 py-1.5 rounded-lg">
+						<span class="text-xs font-medium bg-primary/10 dark:bg-accent/10 text-primary dark:text-accent px-3 py-1.5 rounded-lg">
 							<Icon name="user" size={14} class="inline mr-1" />
 							{$currentUser.name}
 						</span>
@@ -234,7 +234,7 @@
 
 				<div class="pt-3 border-t border-slate-200 dark:border-slate-700 flex flex-col gap-2">
 					{#if $currentUser}
-						<div class="text-xs font-medium bg-primary/10 text-primary px-3 py-2 rounded-lg">
+						<div class="text-xs font-medium bg-primary/10 dark:bg-accent/10 text-primary dark:text-accent px-3 py-2 rounded-lg">
 							<Icon name="user" size={14} class="inline mr-1" />
 							{$currentUser.name}
 						</div>
@@ -298,7 +298,7 @@
 				href="https://github.com/abdalkreem15"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="text-primary hover:text-accent font-medium flex items-center gap-1 transition"
+				class="text-primary dark:text-accent hover:text-accent dark:hover:text-accent-hover font-medium flex items-center gap-1 transition"
 			>
 				<Icon name="github" size={16} />
 				GitHub
@@ -323,13 +323,13 @@
 	@reference "./layout.css";
 
 	.nav-link {
-		@apply text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-accent transition cursor-pointer font-medium text-sm;
+		@apply text-slate-600 dark:text-slate-200 hover:text-primary dark:hover:text-accent transition cursor-pointer font-medium text-sm;
 	}
 	.nav-link.active {
 		@apply text-primary dark:text-accent font-semibold;
 	}
 	.nav-link-mobile {
-		@apply text-left py-2 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-accent transition font-medium text-sm;
+		@apply text-left py-2 text-slate-600 dark:text-slate-200 hover:text-primary dark:hover:text-accent transition font-medium text-sm;
 	}
 	.nav-link-mobile.active {
 		@apply text-primary dark:text-accent font-semibold;

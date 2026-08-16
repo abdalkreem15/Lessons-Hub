@@ -107,8 +107,8 @@
 
     <div class="card p-6 mb-8">
       <div class="flex items-start gap-4">
-        <div class="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center text-2xl flex-shrink-0">
-          <Icon name="folder" size={28} class="text-primary" />
+        <div class="w-16 h-16 rounded-xl bg-primary/10 dark:bg-accent/10 flex items-center justify-center text-2xl flex-shrink-0">
+          <Icon name="folder" size={28} class="text-primary dark:text-accent" />
         </div>
         <div class="flex-1">
           <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">{selectedCourse.title}</h1>
@@ -124,7 +124,7 @@
       <!-- LEFT: Course Content -->
       <div class="lg:col-span-2">
         <h2 class="section-heading mb-4">
-          <Icon name="documentText" size={20} class="inline mr-2 text-primary" />
+          <Icon name="documentText" size={20} class="inline mr-2 text-primary dark:text-accent" />
           Course Material
         </h2>
 
@@ -248,8 +248,8 @@
           >
             <div>
               <div class="flex gap-4 items-start">
-                <div class="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center text-2xl flex-shrink-0">
-                  <Icon name="folder" size={28} class="text-primary" />
+                <div class="w-16 h-16 rounded-xl bg-primary/10 dark:bg-accent/10 flex items-center justify-center text-2xl flex-shrink-0">
+                  <Icon name="folder" size={28} class="text-primary dark:text-accent" />
                 </div>
                 <div class="flex-1">
                   <h3 class="font-bold text-lg text-slate-900 dark:text-slate-100 leading-tight">{course.title}</h3>

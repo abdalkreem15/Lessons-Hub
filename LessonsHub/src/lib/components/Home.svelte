@@ -20,13 +20,13 @@
       <div class="flex flex-col sm:flex-row gap-3">
         <button
           onclick={() => onNavigate('teachers')}
-          class="btn-primary bg-white text-primary hover:bg-slate-50 shadow-lg hover:shadow-xl"
+          class="btn-primary bg-white dark:bg-white text-slate-900 dark:text-slate-900 hover:bg-slate-50 dark:hover:bg-slate-50 shadow-lg hover:shadow-xl"
         >
           Explore Teachers
         </button>
         <button
           onclick={() => onNavigate('about')}
-          class="btn-secondary border-white/30 text-white hover:bg-white/10"
+          class="btn-secondary border-white/30 dark:border-white/30 text-white dark:text-white hover:bg-white/10 dark:hover:bg-white/10 dark:hover:border-white/30"
         >
           Learn More
         </button>
@@ -62,24 +62,24 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="card card-hover p-6 text-center">
-        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-          <Icon name="star" size={24} class="text-primary" />
+        <div class="w-12 h-12 rounded-xl bg-primary/10 dark:bg-accent/10 flex items-center justify-center mx-auto mb-4">
+          <Icon name="star" size={24} class="text-primary dark:text-accent" />
         </div>
         <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100">Top-Rated Tutors</h3>
         <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Learn from experienced educators vetted for quality and communication.</p>
       </div>
 
       <div class="card card-hover p-6 text-center">
-        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-          <Icon name="target" size={24} class="text-primary" />
+        <div class="w-12 h-12 rounded-xl bg-primary/10 dark:bg-accent/10 flex items-center justify-center mx-auto mb-4">
+          <Icon name="target" size={24} class="text-primary dark:text-accent" />
         </div>
         <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100">Targeted Subjects</h3>
         <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Filter easily by specific subjects to find the exact help you need.</p>
       </div>
 
       <div class="card card-hover p-6 text-center">
-        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-          <Icon name="chatBubble" size={24} class="text-primary" />
+        <div class="w-12 h-12 rounded-xl bg-primary/10 dark:bg-accent/10 flex items-center justify-center mx-auto mb-4">
+          <Icon name="chatBubble" size={24} class="text-primary dark:text-accent" />
         </div>
         <h3 class="font-bold text-lg mb-2 text-slate-900 dark:text-slate-100">Direct Support</h3>
         <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Have questions? Reach out easily through our dedicated contact form.</p>

@@ -115,7 +115,7 @@
         {#if isRegistering}
           <div class="pt-2 border-t border-slate-200 dark:border-slate-700">
             <label class="flex items-center gap-2 cursor-pointer select-none">
-              <input type="checkbox" bind:checked={isTeacher} class="rounded border-slate-300 text-primary focus:ring-primary w-4 h-4" />
+              <input type="checkbox" bind:checked={isTeacher} class="rounded border-slate-300 dark:border-slate-600 text-primary dark:text-accent focus:ring-primary dark:focus:ring-accent w-4 h-4" />
               <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">Register as a Teacher</span>
             </label>
           </div>

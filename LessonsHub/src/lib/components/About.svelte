@@ -19,8 +19,8 @@
   <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
     <div class="card card-hover p-6">
       <div class="flex items-start gap-4">
-        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-          <Icon name="target" size={24} class="text-primary" />
+        <div class="w-12 h-12 rounded-xl bg-primary/10 dark:bg-accent/10 flex items-center justify-center flex-shrink-0">
+          <Icon name="target" size={24} class="text-primary dark:text-accent" />
         </div>
         <div>
           <h3 class="font-bold text-lg text-slate-900 dark:text-slate-100 mb-1">Our Mission</h3>
@@ -33,7 +33,7 @@
 
     <div class="card card-hover p-6">
       <div class="flex items-start gap-4">
-        <div class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0">
+        <div class="w-12 h-12 rounded-xl bg-accent/10 dark:bg-accent/10 flex items-center justify-center flex-shrink-0">
           <Icon name="sparkles" size={24} class="text-accent" />
         </div>
         <div>
@@ -52,7 +52,7 @@
 
     <div class="space-y-6">
       <div class="flex gap-4">
-        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm flex-shrink-0">1</div>
+        <div class="w-8 h-8 rounded-full bg-primary dark:bg-accent flex items-center justify-center text-white font-bold text-sm flex-shrink-0">1</div>
         <div>
           <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-1">Browse Tutors</h3>
           <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
@@ -62,7 +62,7 @@
       </div>
 
       <div class="flex gap-4">
-        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm flex-shrink-0">2</div>
+        <div class="w-8 h-8 rounded-full bg-primary dark:bg-accent flex items-center justify-center text-white font-bold text-sm flex-shrink-0">2</div>
         <div>
           <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-1">Filter & Select</h3>
           <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
@@ -72,7 +72,7 @@
       </div>
 
       <div class="flex gap-4">
-        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm flex-shrink-0">3</div>
+        <div class="w-8 h-8 rounded-full bg-primary dark:bg-accent flex items-center justify-center text-white font-bold text-sm flex-shrink-0">3</div>
         <div>
           <h3 class="font-semibold text-slate-900 dark:text-slate-100 mb-1">Book & Learn</h3>
           <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">

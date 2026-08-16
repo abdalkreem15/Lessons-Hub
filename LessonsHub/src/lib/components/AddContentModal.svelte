@@ -88,15 +88,15 @@
       <form onsubmit={handleSubmit} class="space-y-4">
         <!-- Type Selector -->
         <div class="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
-          <button type="button" onclick={() => contentType = 'text'} class="flex-1 py-2 text-sm font-medium rounded-md transition {contentType === 'text' ? 'bg-white dark:bg-slate-900 shadow-sm text-primary' : 'text-slate-600 dark:text-slate-400'} cursor-pointer">
+          <button type="button" onclick={() => contentType = 'text'} class="flex-1 py-2 text-sm font-medium rounded-md transition {contentType === 'text' ? 'bg-white dark:bg-slate-900 shadow-sm text-primary dark:text-accent' : 'text-slate-600 dark:text-slate-400'} cursor-pointer">
             <Icon name="documentText" size={16} class="inline mr-1" />
             Text / Formatting
           </button>
-          <button type="button" onclick={() => contentType = 'video'} class="flex-1 py-2 text-sm font-medium rounded-md transition {contentType === 'video' ? 'bg-white dark:bg-slate-900 shadow-sm text-primary' : 'text-slate-600 dark:text-slate-400'} cursor-pointer">
+          <button type="button" onclick={() => contentType = 'video'} class="flex-1 py-2 text-sm font-medium rounded-md transition {contentType === 'video' ? 'bg-white dark:bg-slate-900 shadow-sm text-primary dark:text-accent' : 'text-slate-600 dark:text-slate-400'} cursor-pointer">
             <Icon name="video" size={16} class="inline mr-1" />
             Video URL
           </button>
-          <button type="button" onclick={() => contentType = 'image'} class="flex-1 py-2 text-sm font-medium rounded-md transition {contentType === 'image' ? 'bg-white dark:bg-slate-900 shadow-sm text-primary' : 'text-slate-600 dark:text-slate-400'} cursor-pointer">
+          <button type="button" onclick={() => contentType = 'image'} class="flex-1 py-2 text-sm font-medium rounded-md transition {contentType === 'image' ? 'bg-white dark:bg-slate-900 shadow-sm text-primary dark:text-accent' : 'text-slate-600 dark:text-slate-400'} cursor-pointer">
             <Icon name="image" size={16} class="inline mr-1" />
             Image URL
           </button>

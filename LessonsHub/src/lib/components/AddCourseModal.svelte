@@ -84,7 +84,7 @@
           <input type="text" inputmode="numeric" id="course-price" bind:value={price} required class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-transparent text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="150" />
         </div>
 
-        <button type="submit" disabled={loading} class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg transition shadow-md {loading ? 'opacity-70 cursor-not-allowed' : ''}">
+        <button type="submit" disabled={loading} class="btn-primary w-full {loading ? 'opacity-70 cursor-not-allowed' : ''}">
           {loading ? 'Saving...' : 'Publish Course'}
         </button>
       </form>

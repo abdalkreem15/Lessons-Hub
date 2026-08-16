@@ -95,7 +95,7 @@
       <!-- LEFT COLUMN: Booking Slots -->
       <div class="lg:col-span-2">
         <h2 class="section-heading mb-4">
-          <Icon name="calendar" size={20} class="inline mr-2 text-primary" />
+          <Icon name="calendar" size={20} class="inline mr-2 text-primary dark:text-accent" />
           Book a Private Session
         </h2>
 
@@ -104,7 +104,7 @@
             {@const parsed = parseSlot(rawSlot)}
             <div class="card p-4">
               <h3 class="font-semibold text-slate-800 dark:text-slate-200 mb-3 text-base flex items-center gap-2">
-                <Icon name="clock" size={16} class="text-primary" />
+                <Icon name="clock" size={16} class="text-primary dark:text-accent" />
                 {parsed.time}
               </h3>
               <div class="flex flex-wrap gap-2">
@@ -155,11 +155,11 @@
         <div>
           <div class="flex justify-between items-center mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">
             <h2 class="section-heading">
-              <Icon name="folder" size={20} class="inline mr-2 text-primary" />
+              <Icon name="folder" size={20} class="inline mr-2 text-primary dark:text-accent" />
               Courses
             </h2>
             {#if currentUser && currentUser.role === 'teacher' && (currentUser.id === (teacher.id || teacher.ID))}
-              <button onclick={onAddCourse} class="text-xs bg-primary/10 text-primary px-3 py-1.5 rounded-lg font-semibold hover:bg-primary hover:text-white transition cursor-pointer">
+              <button onclick={onAddCourse} class="text-xs bg-primary/10 dark:bg-accent/10 text-primary dark:text-accent px-3 py-1.5 rounded-lg font-semibold hover:bg-primary hover:text-white dark:hover:bg-accent dark:hover:text-white transition cursor-pointer">
                 <Icon name="plus" size={14} class="inline mr-1" />
                 New
               </button>
@@ -195,11 +195,11 @@
         <div>
           <div class="flex justify-between items-center mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">
             <h2 class="section-heading">
-              <Icon name="book" size={20} class="inline mr-2 text-primary" />
+              <Icon name="book" size={20} class="inline mr-2 text-primary dark:text-accent" />
               Recommended Books
             </h2>
             {#if currentUser && currentUser.role === 'teacher' && (currentUser.id === (teacher.id || teacher.ID))}
-              <button onclick={onAddBook} class="text-xs bg-primary/10 text-primary px-3 py-1.5 rounded-lg font-semibold hover:bg-primary hover:text-white transition cursor-pointer">
+              <button onclick={onAddBook} class="text-xs bg-primary/10 dark:bg-accent/10 text-primary dark:text-accent px-3 py-1.5 rounded-lg font-semibold hover:bg-primary hover:text-white dark:hover:bg-accent dark:hover:text-white transition cursor-pointer">
                 <Icon name="plus" size={14} class="inline mr-1" />
                 Add
               </button>
