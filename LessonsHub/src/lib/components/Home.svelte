@@ -41,7 +41,7 @@
       <div class="text-xs text-slate-600 dark:text-slate-400 font-medium">Expert Tutors</div>
     </div>
     <div class="card p-6 text-center card-hover">
-      <div class="text-3xl font-extrabold text-primary dark:text-accent mb-1">50+</div>
+      <div class="text-3xl font-extrabold text-primary dark:text-accent mb-1">10+</div>
       <div class="text-xs text-slate-600 dark:text-slate-400 font-medium">Subjects</div>
     </div>
     <div class="card p-6 text-center card-hover">
